@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Rice Cup Calculator</title>
+<style>
+  :root {
+    --bg: #fdf6ec;
+    --card: #ffffff;
+    --accent: #2e7d32;
+    --accent-dark: #1b5e20;
+    --text: #1c1c1c;
+    --muted: #5f6b5f;
+    --border: #d8d0c4;
+    --result-bg: #e8f5e9;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 20px;
+    line-height: 1.5;
+    padding: 16px;
+  }
+  .wrap {
+    max-width: 560px;
+    margin: 0 auto;
+  }
+  h1 {
+    text-align: center;
+    font-size: 1.9rem;
+    margin: 12px 0 4px;
+    color: var(--accent-dark);
+  }
+  .subtitle {
+    text-align: center;
+    color: var(--muted);
+    margin: 0 0 20px;
+    font-size: 1rem;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 18px 18px 8px;
+    margin-bottom: 18px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  }
+  label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 6px;
+    margin-top: 10px;
+  }
+  .hint {
+    font-weight: 400;
+    color: var(--muted);
+    font-size: 0.85rem;
+    display: block;
+    margin-bottom: 8px;
+  }
+  .field {
+    display: flex;
+    align-items: stretch;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+  input[type="number"], select {
+    width: 100%;
+    font-size: 1.3rem;
+    padding: 14px 12px;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    background: #fff;
+    color: var(--text);
+    -moz-appearance: textfield;
+  }
+  input[type="number"]:focus, select:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+  select.unit {
+    width: auto;
+    min-width: 92px;
+    font-size: 1.1rem;
+  }
+  .result {
+    background: var(--result-bg);
+    border: 2px solid var(--accent);
+    border-radius: 16px;
+    padding: 22px 18px;
+    text-align: center;
+    margin-bottom: 18px;
+  }
+  .result .cups {
+    font-size: 3.2rem;
+    font-weight: 800;
+    color: var(--accent-dark);
+    line-height: 1.1;
+    margin: 6px 0;
+  }
+  .result .cups-label {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--accent-dark);
+  }
+  .result .detail {
+    color: var(--muted);
+    font-size: 0.95rem;
+    margin-top: 10px;
+  }
+  .result.warn {
+    background: #fff3e0;
+    border-color: #ef6c00;
+  }
+  .result.warn .cups,
+  .result.warn .cups-label {
+    color: #e65100;
+  }
+  .breakdown {
+    font-size: 0.95rem;
+    color: var(--muted);
+    background: #faf7f1;
+    border-radius: 12px;
+    padding: 12px 14px;
+    margin-top: 4px;
+  }
+  .breakdown div {
+    display: flex;
+    justify-content: space-between;
+    padding: 3px 0;
+  }
+  .breakdown .total {
+    border-top: 1px solid var(--border);
+    margin-top: 4px;
+    padding-top: 7px;
+    font-weight: 700;
+    color: var(--text);
+  }
+  details.settings {
+    margin-top: 8px;
+  }
+  details.settings summary {
+    cursor: pointer;
+    color: var(--accent-dark);
+    font-weight: 600;
+    font-size: 0.95rem;
+    padding: 8px 0;
+  }
+  .settings-body {
+    font-size: 0.95rem;
+  }
+  .settings-body label { font-size: 0.95rem; }
+  .settings-body input { font-size: 1.05rem; padding: 10px; }
+  .reset-btn {
+    background: none;
+    border: none;
+    color: var(--accent-dark);
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: 0.9rem;
+    padding: 6px 0;
+  }
+  footer {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.8rem;
+    margin: 12px 0 24px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>🍚 Rice Cup Calculator</h1>
+  <p class="subtitle">How many dry cups of rice to cook today</p>
+
+  <div class="card">
+    <label for="totalCal">Total calories allowed for the day</label>
+    <span class="hint">Your daily budget</span>
+    <div class="field">
+      <input type="number" id="totalCal" inputmode="numeric" placeholder="e.g. 2000" min="0" step="any" />
+    </div>
+
+    <label for="otherCal">Calories planned for other food</label>
+    <span class="hint">Everything else you'll eat today (snacks, drinks, etc.)</span>
+    <div class="field">
+      <input type="number" id="otherCal" inputmode="numeric" placeholder="e.g. 800" min="0" step="any" />
+    </div>
+
+    <label for="chickenWeight">Weight of the chicken breast package</label>
+    <span class="hint">Thinly sliced chicken breast — read it off the label</span>
+    <div class="field">
+      <input type="number" id="chickenWeight" inputmode="decimal" placeholder="e.g. 16" min="0" step="any" />
+      <select id="chickenUnit" class="unit">
+        <option value="oz">oz</option>
+        <option value="lb">lb</option>
+        <option value="g">grams</option>
+      </select>
+    </div>
+  </div>
+
+  <div id="result" class="result">
+    <div class="cups-label">Cook this much dry rice:</div>
+    <div class="cups" id="cupsOut">—</div>
+    <div class="cups-label" id="cupsUnit">cups</div>
+    <div class="detail" id="detailOut">Fill in the numbers above.</div>
+  </div>
+
+  <div class="card">
+    <div class="breakdown" id="breakdown">
+      <div><span>Daily budget</span><span id="bTotal">—</span></div>
+      <div><span>Other food</span><span id="bOther">—</span></div>
+      <div><span>Chicken</span><span id="bChicken">—</span></div>
+      <div class="total"><span>Left for rice</span><span id="bRice">—</span></div>
+    </div>
+
+    <details class="settings">
+      <summary>⚙️ Adjust the food calorie values</summary>
+      <div class="settings-body">
+        <label for="chickenCalPer100">Chicken calories per 100 g</label>
+        <span class="hint">Raw thinly sliced chicken breast is about 110. Check your label's serving info if you want to be exact.</span>
+        <div class="field">
+          <input type="number" id="chickenCalPer100" inputmode="decimal" step="any" min="0" />
+        </div>
+
+        <label for="riceCalPerCup">Calories per dry cup of rice</label>
+        <span class="hint">Uncooked white rice is about 675 per dry cup. Brown rice is about 685.</span>
+        <div class="field">
+          <input type="number" id="riceCalPerCup" inputmode="decimal" step="any" min="0" />
+        </div>
+
+        <button type="button" class="reset-btn" id="resetDefaults">Reset to default values</button>
+      </div>
+    </details>
+  </div>
+
+  <footer>
+    These are estimates to help plan portions. Adjust the values above to match your products.
+  </footer>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  // ---- Default calorie constants (editable in the UI) ----
+  var DEFAULTS = {
+    chickenCalPer100: 110,  // raw boneless skinless chicken breast, per 100 g
+    riceCalPerCup: 675      // uncooked white rice, per dry US cup
+  };
+
+  // Weight conversions to grams
+  var TO_GRAMS = {
+    oz: 28.3495,
+    lb: 453.592,
+    g: 1
+  };
+
+  var els = {
+    totalCal: document.getElementById("totalCal"),
+    otherCal: document.getElementById("otherCal"),
+    chickenWeight: document.getElementById("chickenWeight"),
+    chickenUnit: document.getElementById("chickenUnit"),
+    chickenCalPer100: document.getElementById("chickenCalPer100"),
+    riceCalPerCup: document.getElementById("riceCalPerCup"),
+    cupsOut: document.getElementById("cupsOut"),
+    cupsUnit: document.getElementById("cupsUnit"),
+    detailOut: document.getElementById("detailOut"),
+    result: document.getElementById("result"),
+    bTotal: document.getElementById("bTotal"),
+    bOther: document.getElementById("bOther"),
+    bChicken: document.getElementById("bChicken"),
+    bRice: document.getElementById("bRice"),
+    resetDefaults: document.getElementById("resetDefaults")
+  };
+
+  var STORE_KEY = "riceCalcSettings";
+
+  function loadSettings() {
+    var s = DEFAULTS;
+    try {
+      var saved = JSON.parse(localStorage.getItem(STORE_KEY));
+      if (saved && typeof saved === "object") {
+        s = {
+          chickenCalPer100: num(saved.chickenCalPer100, DEFAULTS.chickenCalPer100),
+          riceCalPerCup: num(saved.riceCalPerCup, DEFAULTS.riceCalPerCup)
+        };
+      }
+    } catch (e) { /* ignore */ }
+    els.chickenCalPer100.value = s.chickenCalPer100;
+    els.riceCalPerCup.value = s.riceCalPerCup;
+  }
+
+  function saveSettings() {
+    try {
+      localStorage.setItem(STORE_KEY, JSON.stringify({
+        chickenCalPer100: num(els.chickenCalPer100.value, DEFAULTS.chickenCalPer100),
+        riceCalPerCup: num(els.riceCalPerCup.value, DEFAULTS.riceCalPerCup)
+      }));
+    } catch (e) { /* ignore */ }
+  }
+
+  // Parse a number, returning fallback when blank/invalid
+  function num(v, fallback) {
+    var n = parseFloat(v);
+    return isFinite(n) ? n : (fallback === undefined ? NaN : fallback);
+  }
+
+  function fmtCal(n) {
+    return Math.round(n).toLocaleString() + " cal";
+  }
+
+  // Round cups to the nearest practical 1/4 cup
+  function roundToQuarter(n) {
+    return Math.round(n * 4) / 4;
+  }
+
+  function fmtCups(n) {
+    // Show as a friendly fraction-ish number
+    if (n === 0) return "0";
+    return (Math.round(n * 100) / 100).toString();
+  }
+
+  function calculate() {
+    var total = num(els.totalCal.value);
+    var other = num(els.otherCal.value, 0);
+    var weight = num(els.chickenWeight.value);
+    var unit = els.chickenUnit.value;
+    var chickenCalPer100 = num(els.chickenCalPer100.value, DEFAULTS.chickenCalPer100);
+    var riceCalPerCup = num(els.riceCalPerCup.value, DEFAULTS.riceCalPerCup);
+
+    var weightGrams = isFinite(weight) ? weight * (TO_GRAMS[unit] || 1) : NaN;
+    var chickenCal = isFinite(weightGrams) ? (weightGrams / 100) * chickenCalPer100 : 0;
+
+    // Update breakdown
+    els.bTotal.textContent = isFinite(total) ? fmtCal(total) : "—";
+    els.bOther.textContent = isFinite(other) ? "− " + fmtCal(other) : "—";
+    els.bChicken.textContent = isFinite(weightGrams) ? "− " + fmtCal(chickenCal) : "—";
+
+    // Need at least the daily total to compute anything
+    if (!isFinite(total)) {
+      els.bRice.textContent = "—";
+      setResult("—", "cups", "Enter your total daily calories to begin.", false);
+      return;
+    }
+
+    var remaining = total - (isFinite(other) ? other : 0) - chickenCal;
+    els.bRice.textContent = fmtCal(remaining);
+
+    if (riceCalPerCup <= 0) {
+      setResult("—", "cups", "Set a calories-per-cup value greater than zero.", true);
+      return;
+    }
+
+    if (remaining <= 0) {
+      setResult("0", "cups", "No calories left for rice with these numbers.", true);
+      return;
+    }
+
+    var rawCups = remaining / riceCalPerCup;
+    var cups = roundToQuarter(rawCups);
+
+    var detail = "That uses " + fmtCal(remaining) + " of rice (" +
+      fmtCups(rawCups) + " cups exact, rounded to the nearest ¼ cup).";
+
+    setResult(fmtCups(cups), cups === 1 ? "cup" : "cups", detail, false);
+  }
+
+  function setResult(value, unitLabel, detail, warn) {
+    els.cupsOut.textContent = value;
+    els.cupsUnit.textContent = unitLabel;
+    els.detailOut.textContent = detail;
+    if (warn) {
+      els.result.classList.add("warn");
+    } else {
+      els.result.classList.remove("warn");
+    }
+  }
+
+  // Wire up events
+  ["totalCal", "otherCal", "chickenWeight"].forEach(function (id) {
+    els[id].addEventListener("input", calculate);
+  });
+  els.chickenUnit.addEventListener("change", calculate);
+  ["chickenCalPer100", "riceCalPerCup"].forEach(function (id) {
+    els[id].addEventListener("input", function () {
+      saveSettings();
+      calculate();
+    });
+  });
+  els.resetDefaults.addEventListener("click", function () {
+    els.chickenCalPer100.value = DEFAULTS.chickenCalPer100;
+    els.riceCalPerCup.value = DEFAULTS.riceCalPerCup;
+    saveSettings();
+    calculate();
+  });
+
+  loadSettings();
+  calculate();
+})();
+</script>
+</body>
+</html>
