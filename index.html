@@ -25,10 +25,7 @@
     line-height: 1.5;
     padding: 16px;
   }
-  .wrap {
-    max-width: 560px;
-    margin: 0 auto;
-  }
+  .wrap { max-width: 560px; margin: 0 auto; }
   h1 {
     text-align: center;
     font-size: 1.9rem;
@@ -45,9 +42,14 @@
     background: var(--card);
     border: 1px solid var(--border);
     border-radius: 16px;
-    padding: 18px 18px 8px;
+    padding: 18px;
     margin-bottom: 18px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  }
+  .card h2 {
+    font-size: 1.05rem;
+    margin: 0 0 14px;
+    color: var(--accent-dark);
   }
   label {
     display: block;
@@ -82,11 +84,71 @@
     outline: none;
     border-color: var(--accent);
   }
-  select.unit {
-    width: auto;
-    min-width: 92px;
-    font-size: 1.1rem;
+  select.unit { width: auto; min-width: 92px; font-size: 1.1rem; }
+
+  /* Segmented choice buttons */
+  .segmented {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 6px;
   }
+  .seg-btn {
+    flex: 1 1 0;
+    min-width: 96px;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 14px 8px;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    background: #fff;
+    color: var(--text);
+    cursor: pointer;
+    text-align: center;
+    line-height: 1.25;
+  }
+  .seg-btn .amt {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+  .seg-btn[aria-pressed="true"] {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
+  .seg-btn[aria-pressed="true"] .amt { color: #dcedc8; }
+
+  .toggle-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 8px;
+  }
+  .toggle-row .seg-btn { flex: 1 1 0; }
+
+  .budget-readout {
+    text-align: center;
+    background: #f1f8e9;
+    border: 2px dashed var(--accent);
+    border-radius: 12px;
+    padding: 12px;
+    margin-top: 14px;
+  }
+  .budget-readout .big {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--accent-dark);
+    line-height: 1.1;
+  }
+  .budget-readout .formula {
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
   .result {
     background: var(--result-bg);
     border: 2px solid var(--accent);
@@ -102,24 +164,11 @@
     line-height: 1.1;
     margin: 6px 0;
   }
-  .result .cups-label {
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: var(--accent-dark);
-  }
-  .result .detail {
-    color: var(--muted);
-    font-size: 0.95rem;
-    margin-top: 10px;
-  }
-  .result.warn {
-    background: #fff3e0;
-    border-color: #ef6c00;
-  }
-  .result.warn .cups,
-  .result.warn .cups-label {
-    color: #e65100;
-  }
+  .result .cups-label { font-size: 1.2rem; font-weight: 600; color: var(--accent-dark); }
+  .result .detail { color: var(--muted); font-size: 0.95rem; margin-top: 10px; }
+  .result.warn { background: #fff3e0; border-color: #ef6c00; }
+  .result.warn .cups, .result.warn .cups-label { color: #e65100; }
+
   .breakdown {
     font-size: 0.95rem;
     color: var(--muted);
@@ -128,11 +177,7 @@
     padding: 12px 14px;
     margin-top: 4px;
   }
-  .breakdown div {
-    display: flex;
-    justify-content: space-between;
-    padding: 3px 0;
-  }
+  .breakdown div { display: flex; justify-content: space-between; padding: 3px 0; }
   .breakdown .total {
     border-top: 1px solid var(--border);
     margin-top: 4px;
@@ -140,9 +185,7 @@
     font-weight: 700;
     color: var(--text);
   }
-  details.settings {
-    margin-top: 8px;
-  }
+  details.settings { margin-top: 8px; }
   details.settings summary {
     cursor: pointer;
     color: var(--accent-dark);
@@ -150,9 +193,7 @@
     font-size: 0.95rem;
     padding: 8px 0;
   }
-  .settings-body {
-    font-size: 0.95rem;
-  }
+  .settings-body { font-size: 0.95rem; }
   .settings-body label { font-size: 0.95rem; }
   .settings-body input { font-size: 1.05rem; padding: 10px; }
   .reset-btn {
@@ -164,12 +205,7 @@
     font-size: 0.9rem;
     padding: 6px 0;
   }
-  footer {
-    text-align: center;
-    color: var(--muted);
-    font-size: 0.8rem;
-    margin: 12px 0 24px;
-  }
+  footer { text-align: center; color: var(--muted); font-size: 0.8rem; margin: 12px 0 24px; }
 </style>
 </head>
 <body>
@@ -177,12 +213,38 @@
   <h1>🍚 Rice Cup Calculator</h1>
   <p class="subtitle">How many dry cups of rice to cook today</p>
 
+  <!-- STEP 1: Build today's calorie budget from quick toggles -->
   <div class="card">
-    <label for="totalCal">Total calories allowed for the day</label>
-    <span class="hint">Your daily budget</span>
+    <h2>1. Today's calorie budget</h2>
+
+    <label for="baseCal">Base calories (doing nothing)</label>
+    <span class="hint">What you burn on a rest day</span>
     <div class="field">
-      <input type="number" id="totalCal" inputmode="numeric" placeholder="e.g. 2000" min="0" step="any" />
+      <input type="number" id="baseCal" inputmode="numeric" step="any" min="0" />
     </div>
+
+    <label>Working out today?</label>
+    <div class="segmented" id="workoutSeg">
+      <button type="button" class="seg-btn" data-workout="none">No workout<span class="amt">+0</span></button>
+      <button type="button" class="seg-btn" data-workout="workout">Workout<span class="amt" id="amtWorkout">+200</span></button>
+      <button type="button" class="seg-btn" data-workout="leg">Leg day<span class="amt" id="amtLeg">+100</span></button>
+    </div>
+
+    <label>Work day?</label>
+    <div class="toggle-row" id="workdaySeg">
+      <button type="button" class="seg-btn" data-workday="off">No<span class="amt">+0</span></button>
+      <button type="button" class="seg-btn" data-workday="on">Work day<span class="amt" id="amtWorkday">+300</span></button>
+    </div>
+
+    <div class="budget-readout">
+      <div class="big" id="budgetBig">—</div>
+      <div class="formula" id="budgetFormula">calories allowed today</div>
+    </div>
+  </div>
+
+  <!-- STEP 2: Other food + chicken -->
+  <div class="card">
+    <h2>2. Food today</h2>
 
     <label for="otherCal">Calories planned for other food</label>
     <span class="hint">Everything else you'll eat today (snacks, drinks, etc.)</span>
@@ -202,6 +264,7 @@
     </div>
   </div>
 
+  <!-- RESULT -->
   <div id="result" class="result">
     <div class="cups-label">Cook this much dry rice:</div>
     <div class="cups" id="cupsOut">—</div>
@@ -211,17 +274,32 @@
 
   <div class="card">
     <div class="breakdown" id="breakdown">
-      <div><span>Daily budget</span><span id="bTotal">—</span></div>
+      <div><span>Today's budget</span><span id="bTotal">—</span></div>
       <div><span>Other food</span><span id="bOther">—</span></div>
       <div><span>Chicken</span><span id="bChicken">—</span></div>
       <div class="total"><span>Left for rice</span><span id="bRice">—</span></div>
     </div>
 
     <details class="settings">
-      <summary>⚙️ Adjust the food calorie values</summary>
+      <summary>⚙️ Adjust the numbers</summary>
       <div class="settings-body">
+        <label for="workoutCal">Workout bonus (calories)</label>
+        <div class="field">
+          <input type="number" id="workoutCal" inputmode="numeric" step="any" min="0" />
+        </div>
+
+        <label for="legCal">Leg day bonus (calories)</label>
+        <div class="field">
+          <input type="number" id="legCal" inputmode="numeric" step="any" min="0" />
+        </div>
+
+        <label for="workdayCal">Work day bonus (calories)</label>
+        <div class="field">
+          <input type="number" id="workdayCal" inputmode="numeric" step="any" min="0" />
+        </div>
+
         <label for="chickenCalPer100">Chicken calories per 100 g</label>
-        <span class="hint">Raw thinly sliced chicken breast is about 110. Check your label's serving info if you want to be exact.</span>
+        <span class="hint">Raw thinly sliced chicken breast is about 110. Check your label if you want to be exact.</span>
         <div class="field">
           <input type="number" id="chickenCalPer100" inputmode="decimal" step="any" min="0" />
         </div>
@@ -238,7 +316,7 @@
   </div>
 
   <footer>
-    These are estimates to help plan portions. Adjust the values above to match your products.
+    These are estimates to help plan portions. Adjust the values above to match your routine and products.
   </footer>
 </div>
 
@@ -246,26 +324,38 @@
 (function () {
   "use strict";
 
-  // ---- Default calorie constants (editable in the UI) ----
+  // ---- Default values (all editable in the UI) ----
   var DEFAULTS = {
+    baseCal: 2250,          // burned on a rest day
+    workoutCal: 200,        // bonus for a normal workout day
+    legCal: 100,            // bonus for a leg day (replaces the workout bonus)
+    workdayCal: 300,        // bonus for a work day (stacks with a workout)
     chickenCalPer100: 110,  // raw boneless skinless chicken breast, per 100 g
     riceCalPerCup: 675      // uncooked white rice, per dry US cup
   };
 
-  // Weight conversions to grams
-  var TO_GRAMS = {
-    oz: 28.3495,
-    lb: 453.592,
-    g: 1
-  };
+  // Today's toggle selections (not persisted — they change every day)
+  var state = { workout: "none", workday: "off" };
+
+  var TO_GRAMS = { oz: 28.3495, lb: 453.592, g: 1 };
 
   var els = {
-    totalCal: document.getElementById("totalCal"),
+    baseCal: document.getElementById("baseCal"),
     otherCal: document.getElementById("otherCal"),
     chickenWeight: document.getElementById("chickenWeight"),
     chickenUnit: document.getElementById("chickenUnit"),
+    workoutSeg: document.getElementById("workoutSeg"),
+    workdaySeg: document.getElementById("workdaySeg"),
+    workoutCal: document.getElementById("workoutCal"),
+    legCal: document.getElementById("legCal"),
+    workdayCal: document.getElementById("workdayCal"),
     chickenCalPer100: document.getElementById("chickenCalPer100"),
     riceCalPerCup: document.getElementById("riceCalPerCup"),
+    amtWorkout: document.getElementById("amtWorkout"),
+    amtLeg: document.getElementById("amtLeg"),
+    amtWorkday: document.getElementById("amtWorkday"),
+    budgetBig: document.getElementById("budgetBig"),
+    budgetFormula: document.getElementById("budgetFormula"),
     cupsOut: document.getElementById("cupsOut"),
     cupsUnit: document.getElementById("cupsUnit"),
     detailOut: document.getElementById("detailOut"),
@@ -278,54 +368,73 @@
   };
 
   var STORE_KEY = "riceCalcSettings";
+  var SETTING_FIELDS = ["baseCal", "workoutCal", "legCal", "workdayCal", "chickenCalPer100", "riceCalPerCup"];
 
-  function loadSettings() {
-    var s = DEFAULTS;
-    try {
-      var saved = JSON.parse(localStorage.getItem(STORE_KEY));
-      if (saved && typeof saved === "object") {
-        s = {
-          chickenCalPer100: num(saved.chickenCalPer100, DEFAULTS.chickenCalPer100),
-          riceCalPerCup: num(saved.riceCalPerCup, DEFAULTS.riceCalPerCup)
-        };
-      }
-    } catch (e) { /* ignore */ }
-    els.chickenCalPer100.value = s.chickenCalPer100;
-    els.riceCalPerCup.value = s.riceCalPerCup;
-  }
-
-  function saveSettings() {
-    try {
-      localStorage.setItem(STORE_KEY, JSON.stringify({
-        chickenCalPer100: num(els.chickenCalPer100.value, DEFAULTS.chickenCalPer100),
-        riceCalPerCup: num(els.riceCalPerCup.value, DEFAULTS.riceCalPerCup)
-      }));
-    } catch (e) { /* ignore */ }
-  }
-
-  // Parse a number, returning fallback when blank/invalid
   function num(v, fallback) {
     var n = parseFloat(v);
     return isFinite(n) ? n : (fallback === undefined ? NaN : fallback);
   }
 
-  function fmtCal(n) {
-    return Math.round(n).toLocaleString() + " cal";
+  function loadSettings() {
+    var saved = {};
+    try { saved = JSON.parse(localStorage.getItem(STORE_KEY)) || {}; } catch (e) { saved = {}; }
+    SETTING_FIELDS.forEach(function (f) {
+      els[f].value = num(saved[f], DEFAULTS[f]);
+    });
   }
 
-  // Round cups to the nearest practical 1/4 cup
-  function roundToQuarter(n) {
-    return Math.round(n * 4) / 4;
+  function saveSettings() {
+    var out = {};
+    SETTING_FIELDS.forEach(function (f) { out[f] = num(els[f].value, DEFAULTS[f]); });
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(out)); } catch (e) { /* ignore */ }
   }
 
-  function fmtCups(n) {
-    // Show as a friendly fraction-ish number
-    if (n === 0) return "0";
-    return (Math.round(n * 100) / 100).toString();
+  function fmtCal(n) { return Math.round(n).toLocaleString() + " cal"; }
+  function roundToQuarter(n) { return Math.round(n * 4) / 4; }
+  function fmtCups(n) { return n === 0 ? "0" : (Math.round(n * 100) / 100).toString(); }
+
+  // Reflect the chosen segmented buttons + bonus labels
+  function syncButtons() {
+    Array.prototype.forEach.call(els.workoutSeg.querySelectorAll(".seg-btn"), function (b) {
+      b.setAttribute("aria-pressed", b.dataset.workout === state.workout ? "true" : "false");
+    });
+    Array.prototype.forEach.call(els.workdaySeg.querySelectorAll(".seg-btn"), function (b) {
+      b.setAttribute("aria-pressed", b.dataset.workday === state.workday ? "true" : "false");
+    });
+    els.amtWorkout.textContent = "+" + Math.round(num(els.workoutCal.value, DEFAULTS.workoutCal));
+    els.amtLeg.textContent = "+" + Math.round(num(els.legCal.value, DEFAULTS.legCal));
+    els.amtWorkday.textContent = "+" + Math.round(num(els.workdayCal.value, DEFAULTS.workdayCal));
+  }
+
+  // Build today's total budget from base + the active toggles
+  function computeBudget() {
+    var base = num(els.baseCal.value, DEFAULTS.baseCal);
+    var parts = [{ label: Math.round(base).toLocaleString(), val: base }];
+
+    if (state.workout === "workout") {
+      var w = num(els.workoutCal.value, DEFAULTS.workoutCal);
+      parts.push({ label: "+" + Math.round(w) + " workout", val: w });
+    } else if (state.workout === "leg") {
+      var l = num(els.legCal.value, DEFAULTS.legCal);
+      parts.push({ label: "+" + Math.round(l) + " leg day", val: l });
+    }
+    if (state.workday === "on") {
+      var wd = num(els.workdayCal.value, DEFAULTS.workdayCal);
+      parts.push({ label: "+" + Math.round(wd) + " work", val: wd });
+    }
+
+    var total = parts.reduce(function (s, p) { return s + p.val; }, 0);
+    return { total: total, formula: parts.map(function (p) { return p.label; }).join("  ") };
   }
 
   function calculate() {
-    var total = num(els.totalCal.value);
+    syncButtons();
+
+    var budget = computeBudget();
+    var total = budget.total;
+    els.budgetBig.textContent = fmtCal(total);
+    els.budgetFormula.textContent = budget.formula + "  = allowed today";
+
     var other = num(els.otherCal.value, 0);
     var weight = num(els.chickenWeight.value);
     var unit = els.chickenUnit.value;
@@ -335,17 +444,9 @@
     var weightGrams = isFinite(weight) ? weight * (TO_GRAMS[unit] || 1) : NaN;
     var chickenCal = isFinite(weightGrams) ? (weightGrams / 100) * chickenCalPer100 : 0;
 
-    // Update breakdown
     els.bTotal.textContent = isFinite(total) ? fmtCal(total) : "—";
     els.bOther.textContent = isFinite(other) ? "− " + fmtCal(other) : "—";
     els.bChicken.textContent = isFinite(weightGrams) ? "− " + fmtCal(chickenCal) : "—";
-
-    // Need at least the daily total to compute anything
-    if (!isFinite(total)) {
-      els.bRice.textContent = "—";
-      setResult("—", "cups", "Enter your total daily calories to begin.", false);
-      return;
-    }
 
     var remaining = total - (isFinite(other) ? other : 0) - chickenCal;
     els.bRice.textContent = fmtCal(remaining);
@@ -354,7 +455,6 @@
       setResult("—", "cups", "Set a calories-per-cup value greater than zero.", true);
       return;
     }
-
     if (remaining <= 0) {
       setResult("0", "cups", "No calories left for rice with these numbers.", true);
       return;
@@ -362,10 +462,8 @@
 
     var rawCups = remaining / riceCalPerCup;
     var cups = roundToQuarter(rawCups);
-
     var detail = "That uses " + fmtCal(remaining) + " of rice (" +
       fmtCups(rawCups) + " cups exact, rounded to the nearest ¼ cup).";
-
     setResult(fmtCups(cups), cups === 1 ? "cup" : "cups", detail, false);
   }
 
@@ -373,27 +471,34 @@
     els.cupsOut.textContent = value;
     els.cupsUnit.textContent = unitLabel;
     els.detailOut.textContent = detail;
-    if (warn) {
-      els.result.classList.add("warn");
-    } else {
-      els.result.classList.remove("warn");
-    }
+    els.result.classList.toggle("warn", !!warn);
   }
 
-  // Wire up events
-  ["totalCal", "otherCal", "chickenWeight"].forEach(function (id) {
+  // ---- Events ----
+  els.workoutSeg.addEventListener("click", function (e) {
+    var btn = e.target.closest(".seg-btn");
+    if (!btn) return;
+    state.workout = btn.dataset.workout;
+    calculate();
+  });
+  els.workdaySeg.addEventListener("click", function (e) {
+    var btn = e.target.closest(".seg-btn");
+    if (!btn) return;
+    state.workday = btn.dataset.workday;
+    calculate();
+  });
+
+  ["otherCal", "chickenWeight"].forEach(function (id) {
     els[id].addEventListener("input", calculate);
   });
   els.chickenUnit.addEventListener("change", calculate);
-  ["chickenCalPer100", "riceCalPerCup"].forEach(function (id) {
-    els[id].addEventListener("input", function () {
-      saveSettings();
-      calculate();
-    });
+
+  SETTING_FIELDS.forEach(function (id) {
+    els[id].addEventListener("input", function () { saveSettings(); calculate(); });
   });
+
   els.resetDefaults.addEventListener("click", function () {
-    els.chickenCalPer100.value = DEFAULTS.chickenCalPer100;
-    els.riceCalPerCup.value = DEFAULTS.riceCalPerCup;
+    SETTING_FIELDS.forEach(function (f) { els[f].value = DEFAULTS[f]; });
     saveSettings();
     calculate();
   });
