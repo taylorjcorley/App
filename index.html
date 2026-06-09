@@ -1,500 +1,538 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Rice Cup Calculator</title>
 <style>
   :root {
-    --bg: #fdf6ec;
+    --bg: #faf6ef;
+    --ink: #22301f;
+    --muted: #68755f;
+    --line: #ddd5c6;
     --card: #ffffff;
-    --accent: #2e7d32;
-    --accent-dark: #1b5e20;
-    --text: #1c1c1c;
-    --muted: #5f6b5f;
-    --border: #d8d0c4;
-    --result-bg: #e8f5e9;
-    --grandma: #6a1b9a;
-    --grandma-bg: #f5edfb;
-    --grandma-border: #b388d4;
-    --warn: #e65100;
-    --warn-bg: #fff3e0;
+    --green: #2e7d32;
+    --green-dark: #1b5e20;
+    --green-soft: #e9f5ea;
+    --purple: #6a1b9a;
+    --purple-soft: #f6effc;
+    --purple-line: #c39bdd;
+    --orange: #e65100;
+    --orange-soft: #fff3e2;
+    --radius: 18px;
   }
   * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
   body {
     margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    padding: 18px 14px 40px;
     background: var(--bg);
-    color: var(--text);
-    font-size: 20px;
-    line-height: 1.5;
-    padding: 16px;
+    color: var(--ink);
+    font: 400 20px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   }
-  .wrap { max-width: 560px; margin: 0 auto; }
-  h1 {
-    text-align: center;
-    font-size: 1.9rem;
-    margin: 12px 0 4px;
-    color: var(--accent-dark);
-  }
-  .subtitle { text-align: center; color: var(--muted); margin: 0 0 14px; font-size: 1rem; }
+  main { max-width: 540px; margin: 0 auto; }
 
-  .today {
-    text-align: center;
-    background: #fff;
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 10px 12px;
-    margin-bottom: 18px;
-    font-weight: 700;
-    font-size: 1.15rem;
-    color: var(--accent-dark);
-  }
-  .today .cal { display: block; font-weight: 400; font-size: 0.85rem; color: var(--muted); margin-top: 2px; }
+  header { text-align: center; margin-bottom: 14px; }
+  header h1 { margin: 0; font-size: 1.8rem; color: var(--green-dark); }
+  header p { margin: 4px 0 0; color: var(--muted); font-size: 0.95rem; }
 
-  .card {
+  .date-banner {
     background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 18px;
-    margin-bottom: 18px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    text-align: center;
+    padding: 12px 14px;
+    margin-bottom: 16px;
   }
-  .card h2 { font-size: 1.1rem; margin: 0 0 4px; color: var(--accent-dark); }
-  .card .who { font-size: 0.85rem; color: var(--muted); margin: 0 0 14px; }
+  .date-banner strong { display: block; font-size: 1.15rem; color: var(--green-dark); }
+  .date-banner span { font-size: 0.88rem; color: var(--muted); }
 
-  /* The step number badges */
-  .badge {
-    display: inline-block;
-    background: var(--accent);
+  section.card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 18px 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 8px rgba(40, 50, 35, .05);
+  }
+  .card h2 { margin: 0; font-size: 1.12rem; color: var(--green-dark); display: flex; align-items: center; gap: 8px; }
+  .step {
+    flex: none;
+    width: 1.65em; height: 1.65em;
+    border-radius: 50%;
+    background: var(--green);
     color: #fff;
-    border-radius: 999px;
-    width: 1.6em; height: 1.6em;
-    line-height: 1.6em; text-align: center;
-    font-size: 0.95rem; font-weight: 700;
-    margin-right: 6px;
+    font-size: 0.9rem; font-weight: 700;
+    display: inline-flex; align-items: center; justify-content: center;
   }
+  .who { margin: 4px 0 14px; font-size: 0.85rem; color: var(--muted); }
 
-  label { display: block; font-weight: 600; margin-bottom: 6px; margin-top: 10px; }
-  .hint { font-weight: 400; color: var(--muted); font-size: 0.85rem; display: block; margin-bottom: 8px; }
-  .field { display: flex; align-items: stretch; gap: 8px; margin-bottom: 14px; }
-  input[type="number"], select {
+  label { display: block; font-weight: 600; font-size: 0.98rem; margin: 14px 0 6px; }
+  .hint { font-size: 0.82rem; font-weight: 400; color: var(--muted); display: block; margin-bottom: 6px; }
+
+  .row { display: flex; gap: 8px; }
+  input[type=number], select {
     width: 100%;
-    font-size: 1.3rem;
-    padding: 14px 12px;
-    border: 2px solid var(--border);
+    font-size: 1.25rem;
+    padding: 13px 12px;
+    border: 2px solid var(--line);
     border-radius: 12px;
     background: #fff;
-    color: var(--text);
-    -moz-appearance: textfield;
+    color: var(--ink);
   }
-  input[type="number"]:focus, select:focus { outline: none; border-color: var(--accent); }
-  select.unit { width: auto; min-width: 92px; font-size: 1.1rem; }
+  input[type=number]:focus, select:focus { outline: none; border-color: var(--green); }
+  select { width: auto; min-width: 96px; }
 
-  .segmented { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 6px; }
-  .seg-btn {
-    flex: 1 1 0; min-width: 96px;
-    font-size: 1rem; font-weight: 600;
-    padding: 14px 8px;
-    border: 2px solid var(--border);
+  .choices { display: flex; gap: 8px; flex-wrap: wrap; }
+  .choice {
+    flex: 1 1 0; min-width: 92px;
+    padding: 12px 6px;
+    border: 2px solid var(--line);
     border-radius: 12px;
-    background: #fff; color: var(--text);
-    cursor: pointer; text-align: center; line-height: 1.25;
+    background: #fff;
+    font: 600 0.95rem/1.3 inherit;
+    color: var(--ink);
+    cursor: pointer;
   }
-  .seg-btn .amt { display: block; font-size: 0.8rem; font-weight: 500; color: var(--muted); margin-top: 2px; }
-  .seg-btn[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
-  .seg-btn[aria-pressed="true"] .amt { color: #dcedc8; }
-  .toggle-row { display: flex; align-items: center; gap: 12px; margin-top: 8px; }
-  .toggle-row .seg-btn { flex: 1 1 0; }
+  .choice small { display: block; font-weight: 500; font-size: 0.78rem; color: var(--muted); }
+  .choice[aria-pressed=true] { background: var(--green); border-color: var(--green); color: #fff; }
+  .choice[aria-pressed=true] small { color: #d6ecd6; }
 
-  .budget-readout {
+  .budget {
+    margin-top: 16px;
+    background: var(--green-soft);
+    border: 2px dashed var(--green);
+    border-radius: 14px;
     text-align: center;
-    background: #f1f8e9;
-    border: 2px dashed var(--accent);
-    border-radius: 12px;
-    padding: 12px; margin-top: 14px;
+    padding: 12px;
   }
-  .budget-readout .big { font-size: 2rem; font-weight: 800; color: var(--accent-dark); line-height: 1.1; }
-  .budget-readout .formula { font-size: 0.85rem; color: var(--muted); margin-top: 4px; }
+  .budget strong { display: block; font-size: 1.9rem; color: var(--green-dark); line-height: 1.15; }
+  .budget span { font-size: 0.82rem; color: var(--muted); }
 
-  /* Grandma's card — visually distinct */
-  .grandma-card {
-    background: var(--grandma-bg);
-    border: 3px solid var(--grandma-border);
+  .share-btn {
+    display: block;
+    width: 100%;
+    margin-top: 14px;
+    padding: 14px;
+    border: 0;
+    border-radius: 12px;
+    background: var(--green);
+    color: #fff;
+    font: 700 1.05rem inherit;
+    cursor: pointer;
   }
-  .grandma-card h2 { color: var(--grandma); }
-  .grandma-card .badge { background: var(--grandma); }
-  .grandma-card input[type="number"], .grandma-card select { font-size: 1.5rem; padding: 16px 12px; }
-  .grandma-card input:focus, .grandma-card select:focus { border-color: var(--grandma); }
-  .setup-note {
-    border-radius: 10px;
-    padding: 10px 12px;
-    font-size: 0.95rem;
-    margin-bottom: 14px;
-  }
-  .setup-note.ok { background: #e8f5e9; color: var(--accent-dark); }
-  .setup-note.stale { background: var(--warn-bg); color: var(--warn); font-weight: 600; }
+  .share-btn:active { background: var(--green-dark); }
+  .share-note { margin: 8px 0 0; text-align: center; font-size: 0.8rem; color: var(--muted); }
+
+  /* Grandma's card */
+  .grandma { background: var(--purple-soft); border: 3px solid var(--purple-line); }
+  .grandma h2 { color: var(--purple); }
+  .grandma .step { background: var(--purple); }
+  .grandma input, .grandma select { font-size: 1.45rem; padding: 15px 12px; }
+  .grandma input:focus, .grandma select:focus { border-color: var(--purple); }
+
+  .freshness { border-radius: 12px; padding: 10px 12px; font-size: 0.92rem; margin-bottom: 4px; }
+  .freshness.ok { background: var(--green-soft); color: var(--green-dark); }
+  .freshness.stale { background: var(--orange-soft); color: var(--orange); font-weight: 600; }
 
   /* The answer */
   .answer {
-    background: var(--result-bg);
-    border: 3px solid var(--accent);
-    border-radius: 16px;
-    padding: 22px 18px;
+    background: var(--green-soft);
+    border: 3px solid var(--green);
+    border-radius: var(--radius);
     text-align: center;
-    margin-bottom: 18px;
+    padding: 22px 16px;
+    margin-bottom: 16px;
   }
-  .answer .answer-label {
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    font-size: 0.8rem;
-    font-weight: 700;
-    color: var(--accent);
-  }
-  .answer .lead { font-size: 1.15rem; font-weight: 600; color: var(--accent-dark); margin-top: 4px; }
-  .answer .cups { font-size: 3.6rem; font-weight: 800; color: var(--accent-dark); line-height: 1.05; margin: 8px 0 2px; }
-  .answer .cups-label { font-size: 1.3rem; font-weight: 700; color: var(--accent-dark); }
-  .answer .detail { color: var(--muted); font-size: 0.95rem; margin-top: 12px; }
-  .answer.warn { background: var(--warn-bg); border-color: var(--warn); }
-  .answer.warn .cups, .answer.warn .cups-label, .answer.warn .lead, .answer.warn .answer-label { color: var(--warn); }
+  .answer .tag { font-size: 0.78rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--green); }
+  .answer .lead { font-size: 1.1rem; font-weight: 600; color: var(--green-dark); margin-top: 2px; }
+  .answer .num { font-size: 4rem; font-weight: 800; color: var(--green-dark); line-height: 1.05; margin: 6px 0 0; }
+  .answer .unit { font-size: 1.25rem; font-weight: 700; color: var(--green-dark); }
+  .answer .note { font-size: 0.9rem; color: var(--muted); margin-top: 12px; }
+  .answer.warn { background: var(--orange-soft); border-color: var(--orange); }
+  .answer.warn .tag, .answer.warn .lead, .answer.warn .num, .answer.warn .unit { color: var(--orange); }
 
-  details.more { margin-top: 4px; }
-  details.more > summary {
-    cursor: pointer; color: var(--accent-dark); font-weight: 600; font-size: 0.95rem; padding: 8px 0;
-    list-style: none;
+  details { margin-top: 6px; }
+  details summary {
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.92rem;
+    color: var(--green-dark);
+    padding: 8px 0;
   }
-  details.more > summary::-webkit-details-marker { display: none; }
-  .breakdown { font-size: 0.95rem; color: var(--muted); background: #faf7f1; border-radius: 12px; padding: 12px 14px; margin-top: 8px; }
-  .breakdown div { display: flex; justify-content: space-between; padding: 3px 0; }
-  .breakdown .total { border-top: 1px solid var(--border); margin-top: 4px; padding-top: 7px; font-weight: 700; color: var(--text); }
+  .math { background: #faf7f0; border-radius: 12px; padding: 12px 14px; font-size: 0.92rem; color: var(--muted); }
+  .math div { display: flex; justify-content: space-between; padding: 2px 0; }
+  .math .sum { border-top: 1px solid var(--line); margin-top: 6px; padding-top: 8px; font-weight: 700; color: var(--ink); }
 
-  details.settings { margin-top: 8px; }
-  details.settings summary { cursor: pointer; color: var(--accent-dark); font-weight: 600; font-size: 0.95rem; padding: 8px 0; }
-  .settings-body { font-size: 0.95rem; }
-  .settings-body label { font-size: 0.95rem; }
-  .settings-body input { font-size: 1.05rem; padding: 10px; }
-  .reset-btn { background: none; border: none; color: var(--accent-dark); text-decoration: underline; cursor: pointer; font-size: 0.9rem; padding: 6px 0; }
-  footer { text-align: center; color: var(--muted); font-size: 0.8rem; margin: 12px 0 24px; }
+  .settings label { font-size: 0.9rem; margin-top: 12px; }
+  .settings input { font-size: 1.05rem; padding: 10px; }
+  .link-btn { background: none; border: 0; padding: 8px 0; color: var(--green-dark); text-decoration: underline; font: 600 0.88rem inherit; cursor: pointer; }
+
+  footer { text-align: center; font-size: 0.78rem; color: var(--muted); margin-top: 8px; }
+
+  .toast {
+    position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%);
+    background: var(--ink); color: #fff;
+    padding: 10px 18px; border-radius: 999px;
+    font-size: 0.9rem;
+    opacity: 0; pointer-events: none;
+    transition: opacity .25s;
+  }
+  .toast.show { opacity: 1; }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <h1>🍚 Rice Cup Calculator</h1>
-  <p class="subtitle">How many dry cups of rice to cook today</p>
+<main>
+  <header>
+    <h1>🍚 Rice Cup Calculator</h1>
+    <p>How many dry cups of rice to cook today</p>
+  </header>
 
-  <div class="today">
-    <span id="todayDate">—</span>
-    <span class="cal" id="todayBudget"></span>
+  <div class="date-banner">
+    <strong id="todayLine">—</strong>
+    <span id="budgetLine"></span>
   </div>
 
-  <!-- TAYLOR sets this up -->
-  <div class="card">
-    <h2><span class="badge">1</span>Today's plan</h2>
-    <p class="who">👤 Taylor fills this in — set it up each day.</p>
+  <!-- Step 1: Taylor -->
+  <section class="card" id="taylorCard">
+    <h2><span class="step">1</span> Today's plan</h2>
+    <p class="who">👤 Taylor fills this in each day.</p>
 
     <label>Working out today?</label>
-    <div class="segmented" id="workoutSeg">
-      <button type="button" class="seg-btn" data-workout="none">No workout<span class="amt">+0</span></button>
-      <button type="button" class="seg-btn" data-workout="workout">Workout<span class="amt" id="amtWorkout">+200</span></button>
-      <button type="button" class="seg-btn" data-workout="leg">Leg day<span class="amt" id="amtLeg">+100</span></button>
+    <div class="choices" id="workoutChoices">
+      <button type="button" class="choice" data-value="none">No workout<small>+0</small></button>
+      <button type="button" class="choice" data-value="workout">Workout<small id="amtWorkout">+200</small></button>
+      <button type="button" class="choice" data-value="leg">Leg day<small id="amtLeg">+100</small></button>
     </div>
 
     <label>Work day?</label>
-    <div class="toggle-row" id="workdaySeg">
-      <button type="button" class="seg-btn" data-workday="off">No<span class="amt">+0</span></button>
-      <button type="button" class="seg-btn" data-workday="on">Work day<span class="amt" id="amtWorkday">+300</span></button>
+    <div class="choices" id="workdayChoices">
+      <button type="button" class="choice" data-value="off">No<small>+0</small></button>
+      <button type="button" class="choice" data-value="on">Work day<small id="amtWorkday">+300</small></button>
     </div>
 
-    <label for="otherCal" style="margin-top:16px;">Calories planned for other food</label>
-    <span class="hint">Everything else you'll eat today (snacks, drinks, etc.)</span>
-    <div class="field">
-      <input type="number" id="otherCal" inputmode="numeric" placeholder="e.g. 800" min="0" step="any" />
+    <label for="otherCal">Calories planned for other food</label>
+    <span class="hint">Everything else you'll eat today — snacks, drinks, the lot.</span>
+    <input type="number" id="otherCal" inputmode="numeric" min="0" step="any" placeholder="e.g. 800">
+
+    <div class="budget">
+      <strong id="budgetBig">—</strong>
+      <span id="budgetFormula">calories allowed today</span>
     </div>
 
-    <div class="budget-readout">
-      <div class="big" id="budgetBig">—</div>
-      <div class="formula" id="budgetFormula">calories allowed today</div>
-    </div>
-  </div>
+    <button type="button" class="share-btn" id="shareBtn">📲 Send today's plan to Grandma</button>
+    <p class="share-note">Copies a link with today's plan baked in — text it to her and her device is set up automatically.</p>
+  </section>
 
-  <!-- GRANDMA's one input -->
-  <div class="card grandma-card">
-    <h2><span class="badge">2</span>The chicken</h2>
+  <!-- Step 2: Grandma -->
+  <section class="card grandma">
+    <h2><span class="step">2</span> The chicken</h2>
     <p class="who">👵 Grandma — this is the only thing you enter.</p>
 
-    <div class="setup-note" id="setupNote"></div>
+    <div class="freshness" id="freshness"></div>
 
     <label for="chickenWeight">Weight of the chicken breast package</label>
-    <span class="hint">Thinly sliced chicken breast — read the number off the label.</span>
-    <div class="field">
-      <input type="number" id="chickenWeight" inputmode="decimal" placeholder="e.g. 16" min="0" step="any" />
-      <select id="chickenUnit" class="unit">
+    <span class="hint">Read the number off the label.</span>
+    <div class="row">
+      <input type="number" id="chickenWeight" inputmode="decimal" min="0" step="any" placeholder="e.g. 16">
+      <select id="chickenUnit">
         <option value="oz">oz</option>
         <option value="lb">lb</option>
         <option value="g">grams</option>
       </select>
     </div>
-  </div>
+  </section>
 
-  <!-- THE ANSWER -->
-  <div id="answer" class="answer">
-    <div class="answer-label">⬇ The answer ⬇</div>
+  <!-- The answer -->
+  <section class="answer" id="answer">
+    <div class="tag">⬇ The answer ⬇</div>
     <div class="lead">Cook this much dry rice:</div>
-    <div class="cups" id="cupsOut">—</div>
-    <div class="cups-label" id="cupsUnit">cups</div>
-    <div class="detail" id="detailOut">Fill in the chicken weight above.</div>
-  </div>
+    <div class="num" id="cupsNum">—</div>
+    <div class="unit" id="cupsUnit">cups</div>
+    <div class="note" id="answerNote">Type the chicken weight above.</div>
+  </section>
 
-  <div class="card">
-    <details class="more">
+  <section class="card">
+    <details>
       <summary>🔢 Show the math</summary>
-      <div class="breakdown" id="breakdown">
-        <div><span>Today's budget</span><span id="bTotal">—</span></div>
-        <div><span>Other food</span><span id="bOther">—</span></div>
-        <div><span>Chicken</span><span id="bChicken">—</span></div>
-        <div class="total"><span>Left for rice</span><span id="bRice">—</span></div>
+      <div class="math">
+        <div><span>Today's budget</span><span id="mBudget">—</span></div>
+        <div><span>Other food</span><span id="mOther">—</span></div>
+        <div><span>Chicken</span><span id="mChicken">—</span></div>
+        <div class="sum"><span>Left for rice</span><span id="mRice">—</span></div>
       </div>
     </details>
 
     <details class="settings">
       <summary>⚙️ Adjust the numbers (Taylor)</summary>
-      <div class="settings-body">
+      <div>
         <label for="baseCal">Base calories (rest day)</label>
-        <div class="field"><input type="number" id="baseCal" inputmode="numeric" step="any" min="0" /></div>
+        <input type="number" id="baseCal" inputmode="numeric" min="0" step="any">
 
-        <label for="workoutCal">Workout bonus (calories)</label>
-        <div class="field"><input type="number" id="workoutCal" inputmode="numeric" step="any" min="0" /></div>
+        <label for="workoutCal">Workout bonus</label>
+        <input type="number" id="workoutCal" inputmode="numeric" min="0" step="any">
 
-        <label for="legCal">Leg day bonus (calories)</label>
-        <div class="field"><input type="number" id="legCal" inputmode="numeric" step="any" min="0" /></div>
+        <label for="legCal">Leg day bonus</label>
+        <input type="number" id="legCal" inputmode="numeric" min="0" step="any">
 
-        <label for="workdayCal">Work day bonus (calories)</label>
-        <div class="field"><input type="number" id="workdayCal" inputmode="numeric" step="any" min="0" /></div>
+        <label for="workdayCal">Work day bonus</label>
+        <input type="number" id="workdayCal" inputmode="numeric" min="0" step="any">
 
         <label for="chickenCalPer100">Chicken calories per 100 g</label>
-        <span class="hint">Raw thinly sliced chicken breast is about 110. Check your label if you want to be exact.</span>
-        <div class="field"><input type="number" id="chickenCalPer100" inputmode="decimal" step="any" min="0" /></div>
+        <span class="hint">Raw sliced chicken breast ≈ 110. Check the label to be exact.</span>
+        <input type="number" id="chickenCalPer100" inputmode="decimal" min="0" step="any">
 
         <label for="riceCalPerCup">Calories per dry cup of rice</label>
-        <span class="hint">Uncooked white rice is about 675 per dry cup. Brown rice is about 685.</span>
-        <div class="field"><input type="number" id="riceCalPerCup" inputmode="decimal" step="any" min="0" /></div>
+        <span class="hint">Uncooked white rice ≈ 675 per dry cup; brown ≈ 685.</span>
+        <input type="number" id="riceCalPerCup" inputmode="decimal" min="0" step="any">
 
-        <button type="button" class="reset-btn" id="resetDefaults">Reset to default values</button>
+        <button type="button" class="link-btn" id="resetBtn">Reset to defaults</button>
       </div>
     </details>
-  </div>
+  </section>
 
-  <footer>These are estimates to help plan portions. Adjust the values to match your routine and products.</footer>
-</div>
+  <footer>Estimates to help plan portions — tweak the numbers to match your products.</footer>
+</main>
+
+<div class="toast" id="toast"></div>
 
 <script>
-(function () {
+(() => {
   "use strict";
 
-  var DEFAULTS = {
-    baseCal: 2250, workoutCal: 200, legCal: 100, workdayCal: 300,
-    chickenCalPer100: 110, riceCalPerCup: 675
+  const DEFAULTS = {
+    baseCal: 2250,
+    workoutCal: 200,   // normal workout day
+    legCal: 100,       // leg day replaces the workout bonus
+    workdayCal: 300,   // stacks on top of a workout
+    chickenCalPer100: 110,  // raw boneless skinless breast per 100 g
+    riceCalPerCup: 675      // uncooked white rice per dry US cup
+  };
+  const GRAMS = { oz: 28.3495, lb: 453.592, g: 1 };
+  const SETTINGS_KEY = "riceCalc.settings";
+  const PLAN_KEY = "riceCalc.plan";
+
+  const $ = id => document.getElementById(id);
+  const els = {};
+  ["todayLine","budgetLine","workoutChoices","workdayChoices","otherCal",
+   "budgetBig","budgetFormula","shareBtn","freshness","chickenWeight","chickenUnit",
+   "answer","cupsNum","cupsUnit","answerNote","mBudget","mOther","mChicken","mRice",
+   "baseCal","workoutCal","legCal","workdayCal","chickenCalPer100","riceCalPerCup",
+   "resetBtn","toast"].forEach(id => els[id] = $(id));
+
+  const SETTING_FIELDS = ["baseCal","workoutCal","legCal","workdayCal","chickenCalPer100","riceCalPerCup"];
+
+  // Today's plan. setupDate stamps when Taylor last touched it.
+  let plan = { workout: "none", workday: "off", otherCal: "", setupDate: null };
+
+  const num = (v, fb) => {
+    const n = parseFloat(v);
+    return Number.isFinite(n) ? n : (fb === undefined ? NaN : fb);
+  };
+  const cal = n => Math.round(n).toLocaleString() + " cal";
+
+  const dateStr = d =>
+    d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+  const prettyDate = d =>
+    d.toLocaleDateString(undefined, { weekday: "long", month: "long", day: "numeric", year: "numeric" });
+
+  // 1.75 -> "1¾"
+  const fracCups = n => {
+    const whole = Math.floor(n);
+    const frac = { 0: "", 0.25: "¼", 0.5: "½", 0.75: "¾" }[Math.round((n - whole) * 4) / 4] ?? "";
+    if (whole === 0) return frac || "0";
+    return whole + frac;
   };
 
-  var TO_GRAMS = { oz: 28.3495, lb: 453.592, g: 1 };
-
-  var els = {};
-  ["baseCal","otherCal","chickenWeight","chickenUnit","workoutSeg","workdaySeg",
-   "workoutCal","legCal","workdayCal","chickenCalPer100","riceCalPerCup",
-   "amtWorkout","amtLeg","amtWorkday","budgetBig","budgetFormula",
-   "todayDate","todayBudget","setupNote",
-   "cupsOut","cupsUnit","detailOut","answer",
-   "bTotal","bOther","bChicken","bRice","resetDefaults"
-  ].forEach(function (id) { els[id] = document.getElementById(id); });
-
-  var SETTINGS_KEY = "riceCalcSettings";   // Taylor's constants (rarely change)
-  var DAILY_KEY = "riceCalcDaily";         // today's plan (changes day to day)
-  var SETTING_FIELDS = ["baseCal","workoutCal","legCal","workdayCal","chickenCalPer100","riceCalPerCup"];
-
-  // Today's plan (persisted so grandma sees what Taylor set on this device)
-  var daily = { workout: "none", workday: "off", otherCal: "", setupDate: null };
-
-  function num(v, fallback) {
-    var n = parseFloat(v);
-    return isFinite(n) ? n : (fallback === undefined ? NaN : fallback);
-  }
-  function fmtCal(n) { return Math.round(n).toLocaleString() + " cal"; }
-  function roundToQuarter(n) { return Math.round(n * 4) / 4; }
-  function fmtCups(n) { return n === 0 ? "0" : (Math.round(n * 100) / 100).toString(); }
-
-  // Local YYYY-MM-DD (for comparing "set up" day to today)
-  function localDateStr(d) {
-    return d.getFullYear() + "-" +
-      String(d.getMonth() + 1).padStart(2, "0") + "-" +
-      String(d.getDate()).padStart(2, "0");
-  }
-  function prettyDate(d) {
+  // ---------- persistence ----------
+  const loadSettings = () => {
+    let s = {};
+    try { s = JSON.parse(localStorage.getItem(SETTINGS_KEY)) || {}; } catch {}
+    SETTING_FIELDS.forEach(f => els[f].value = num(s[f], DEFAULTS[f]));
+  };
+  const saveSettings = () => {
+    const s = {};
+    SETTING_FIELDS.forEach(f => s[f] = num(els[f].value, DEFAULTS[f]));
+    try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(s)); } catch {}
+  };
+  const loadPlan = () => {
     try {
-      return d.toLocaleDateString(undefined, { weekday: "long", month: "long", day: "numeric", year: "numeric" });
-    } catch (e) {
-      return d.toDateString();
-    }
-  }
+      const s = JSON.parse(localStorage.getItem(PLAN_KEY));
+      if (s && typeof s === "object") plan = { ...plan, ...s };
+    } catch {}
+  };
+  const savePlan = stamp => {
+    if (stamp) plan.setupDate = dateStr(new Date());
+    plan.otherCal = els.otherCal.value;
+    try { localStorage.setItem(PLAN_KEY, JSON.stringify(plan)); } catch {}
+  };
 
-  // ---- Persistence ----
-  function loadSettings() {
-    var saved = {};
-    try { saved = JSON.parse(localStorage.getItem(SETTINGS_KEY)) || {}; } catch (e) {}
-    SETTING_FIELDS.forEach(function (f) { els[f].value = num(saved[f], DEFAULTS[f]); });
-  }
-  function saveSettings() {
-    var out = {};
-    SETTING_FIELDS.forEach(function (f) { out[f] = num(els[f].value, DEFAULTS[f]); });
-    try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(out)); } catch (e) {}
-  }
-  function loadDaily() {
-    try {
-      var s = JSON.parse(localStorage.getItem(DAILY_KEY));
-      if (s && typeof s === "object") {
-        daily.workout = s.workout || "none";
-        daily.workday = s.workday || "off";
-        daily.otherCal = (s.otherCal === undefined || s.otherCal === null) ? "" : s.otherCal;
-        daily.setupDate = s.setupDate || null;
-      }
-    } catch (e) {}
-    els.otherCal.value = daily.otherCal;
-  }
-  function saveDaily(markToday) {
-    if (markToday) daily.setupDate = localDateStr(new Date());
-    daily.otherCal = els.otherCal.value;
-    try { localStorage.setItem(DAILY_KEY, JSON.stringify(daily)); } catch (e) {}
-  }
+  // A plan shared via link: ?w=workout&d=on&o=800&t=2026-06-09
+  const readSharedPlan = () => {
+    const q = new URLSearchParams(location.search);
+    if (!q.has("t")) return false;
+    plan.workout = ["none","workout","leg"].includes(q.get("w")) ? q.get("w") : "none";
+    plan.workday = q.get("d") === "on" ? "on" : "off";
+    plan.otherCal = q.get("o") ?? "";
+    plan.setupDate = q.get("t");
+    els.otherCal.value = plan.otherCal;
+    savePlan(false);
+    // Clean the URL so a reload tomorrow doesn't resurrect an old plan
+    history.replaceState(null, "", location.pathname);
+    return true;
+  };
 
-  function syncButtons() {
-    Array.prototype.forEach.call(els.workoutSeg.querySelectorAll(".seg-btn"), function (b) {
-      b.setAttribute("aria-pressed", b.dataset.workout === daily.workout ? "true" : "false");
-    });
-    Array.prototype.forEach.call(els.workdaySeg.querySelectorAll(".seg-btn"), function (b) {
-      b.setAttribute("aria-pressed", b.dataset.workday === daily.workday ? "true" : "false");
-    });
-    els.amtWorkout.textContent = "+" + Math.round(num(els.workoutCal.value, DEFAULTS.workoutCal));
-    els.amtLeg.textContent = "+" + Math.round(num(els.legCal.value, DEFAULTS.legCal));
-    els.amtWorkday.textContent = "+" + Math.round(num(els.workdayCal.value, DEFAULTS.workdayCal));
-  }
+  // ---------- model ----------
+  const budget = () => {
+    const base = num(els.baseCal.value, DEFAULTS.baseCal);
+    const parts = [{ label: Math.round(base).toLocaleString(), v: base }];
+    if (plan.workout === "workout")
+      parts.push({ label: `+${Math.round(num(els.workoutCal.value, DEFAULTS.workoutCal))} workout`, v: num(els.workoutCal.value, DEFAULTS.workoutCal) });
+    else if (plan.workout === "leg")
+      parts.push({ label: `+${Math.round(num(els.legCal.value, DEFAULTS.legCal))} leg day`, v: num(els.legCal.value, DEFAULTS.legCal) });
+    if (plan.workday === "on")
+      parts.push({ label: `+${Math.round(num(els.workdayCal.value, DEFAULTS.workdayCal))} work`, v: num(els.workdayCal.value, DEFAULTS.workdayCal) });
+    return {
+      total: parts.reduce((s, p) => s + p.v, 0),
+      formula: parts.map(p => p.label).join("  ")
+    };
+  };
 
-  function computeBudget() {
-    var base = num(els.baseCal.value, DEFAULTS.baseCal);
-    var parts = [{ label: Math.round(base).toLocaleString(), val: base }];
-    if (daily.workout === "workout") {
-      var w = num(els.workoutCal.value, DEFAULTS.workoutCal);
-      parts.push({ label: "+" + Math.round(w) + " workout", val: w });
-    } else if (daily.workout === "leg") {
-      var l = num(els.legCal.value, DEFAULTS.legCal);
-      parts.push({ label: "+" + Math.round(l) + " leg day", val: l });
-    }
-    if (daily.workday === "on") {
-      var wd = num(els.workdayCal.value, DEFAULTS.workdayCal);
-      parts.push({ label: "+" + Math.round(wd) + " work", val: wd });
-    }
-    var total = parts.reduce(function (s, p) { return s + p.val; }, 0);
-    return { total: total, formula: parts.map(function (p) { return p.label; }).join("  ") };
-  }
+  // ---------- view ----------
+  const syncChoices = () => {
+    for (const b of els.workoutChoices.querySelectorAll(".choice"))
+      b.setAttribute("aria-pressed", b.dataset.value === plan.workout);
+    for (const b of els.workdayChoices.querySelectorAll(".choice"))
+      b.setAttribute("aria-pressed", b.dataset.value === plan.workday);
+    $("amtWorkout").textContent = "+" + Math.round(num(els.workoutCal.value, DEFAULTS.workoutCal));
+    $("amtLeg").textContent = "+" + Math.round(num(els.legCal.value, DEFAULTS.legCal));
+    $("amtWorkday").textContent = "+" + Math.round(num(els.workdayCal.value, DEFAULTS.workdayCal));
+  };
 
-  // Show grandma whether the plan is fresh (set up today) or stale
-  function renderSetupNote() {
-    var todayStr = localDateStr(new Date());
-    if (!daily.setupDate) {
-      els.setupNote.className = "setup-note stale";
-      els.setupNote.textContent = "⚠️ Taylor hasn't set up today's plan yet (Step 1 above).";
-    } else if (daily.setupDate === todayStr) {
-      els.setupNote.className = "setup-note ok";
-      els.setupNote.textContent = "✓ Taylor set up today's plan. Just enter the chicken weight.";
+  const renderFreshness = () => {
+    const today = dateStr(new Date());
+    const el = els.freshness;
+    if (!plan.setupDate) {
+      el.className = "freshness stale";
+      el.textContent = "⚠️ Taylor hasn't set up today's plan yet (Step 1 above).";
+    } else if (plan.setupDate === today) {
+      el.className = "freshness ok";
+      el.textContent = "✓ Taylor set up today's plan. Just enter the chicken weight.";
     } else {
-      var d = new Date(daily.setupDate + "T00:00:00");
-      els.setupNote.className = "setup-note stale";
-      els.setupNote.textContent = "⚠️ This plan was last set up on " + prettyDate(d) +
-        " — not today. Ask Taylor to update Step 1.";
+      el.className = "freshness stale";
+      el.textContent = `⚠️ This plan is from ${prettyDate(new Date(plan.setupDate + "T00:00:00"))} — not today. Ask Taylor to update it.`;
     }
-  }
+  };
 
-  function calculate() {
-    syncButtons();
+  const setAnswer = (value, unit, note, warn) => {
+    els.cupsNum.textContent = value;
+    els.cupsUnit.textContent = unit;
+    els.answerNote.textContent = note;
+    els.answer.classList.toggle("warn", !!warn);
+  };
 
-    var now = new Date();
-    els.todayDate.textContent = "📅 Today is " + prettyDate(now);
+  const render = () => {
+    syncChoices();
+    renderFreshness();
 
-    var budget = computeBudget();
-    els.budgetBig.textContent = fmtCal(budget.total);
-    els.budgetFormula.textContent = budget.formula + "  = allowed today";
-    els.todayBudget.textContent = "Budget: " + fmtCal(budget.total);
+    els.todayLine.textContent = "📅 Today is " + prettyDate(new Date());
 
-    renderSetupNote();
+    const b = budget();
+    els.budgetBig.textContent = cal(b.total);
+    els.budgetFormula.textContent = b.formula + "  =  allowed today";
+    els.budgetLine.textContent = "Today's budget: " + cal(b.total);
 
-    var total = budget.total;
-    var other = num(els.otherCal.value, 0);
-    var weight = num(els.chickenWeight.value);
-    var unit = els.chickenUnit.value;
-    var chickenCalPer100 = num(els.chickenCalPer100.value, DEFAULTS.chickenCalPer100);
-    var riceCalPerCup = num(els.riceCalPerCup.value, DEFAULTS.riceCalPerCup);
+    const other = num(els.otherCal.value, 0);
+    const weight = num(els.chickenWeight.value);
+    const grams = Number.isFinite(weight) ? weight * (GRAMS[els.chickenUnit.value] || 1) : NaN;
+    const chickenCal = Number.isFinite(grams) ? grams / 100 * num(els.chickenCalPer100.value, DEFAULTS.chickenCalPer100) : 0;
+    const perCup = num(els.riceCalPerCup.value, DEFAULTS.riceCalPerCup);
+    const remaining = b.total - other - chickenCal;
 
-    var weightGrams = isFinite(weight) ? weight * (TO_GRAMS[unit] || 1) : NaN;
-    var chickenCal = isFinite(weightGrams) ? (weightGrams / 100) * chickenCalPer100 : 0;
+    els.mBudget.textContent = cal(b.total);
+    els.mOther.textContent = "− " + cal(other);
+    els.mChicken.textContent = Number.isFinite(grams) ? "− " + cal(chickenCal) : "—";
+    els.mRice.textContent = cal(remaining);
 
-    els.bTotal.textContent = fmtCal(total);
-    els.bOther.textContent = isFinite(other) ? "− " + fmtCal(other) : "—";
-    els.bChicken.textContent = isFinite(weightGrams) ? "− " + fmtCal(chickenCal) : "—";
-
-    var remaining = total - (isFinite(other) ? other : 0) - chickenCal;
-    els.bRice.textContent = fmtCal(remaining);
-
-    if (!isFinite(weight)) {
+    if (!Number.isFinite(weight)) {
       setAnswer("—", "cups", "👵 Grandma: type the chicken package weight above to see the answer.", false);
       return;
     }
-    if (riceCalPerCup <= 0) {
-      setAnswer("—", "cups", "Set a calories-per-cup value greater than zero (in ⚙️).", true);
+    if (perCup <= 0) {
+      setAnswer("—", "cups", "Set a calories-per-cup value above zero (in ⚙️).", true);
       return;
     }
     if (remaining <= 0) {
       setAnswer("0", "cups", "No calories left for rice with today's numbers.", true);
       return;
     }
+    const raw = remaining / perCup;
+    const cups = Math.round(raw * 4) / 4;
+    setAnswer(
+      fracCups(cups),
+      cups === 1 ? "cup" : "cups",
+      `Uses ${cal(remaining)} of rice — exactly ${raw.toFixed(2)} cups, rounded to the nearest ¼ cup.`,
+      false
+    );
+  };
 
-    var rawCups = remaining / riceCalPerCup;
-    var cups = roundToQuarter(rawCups);
-    var detail = "That uses " + fmtCal(remaining) + " of rice (" +
-      fmtCups(rawCups) + " cups exact, rounded to the nearest ¼ cup).";
-    setAnswer(fmtCups(cups), cups === 1 ? "cup" : "cups", detail, false);
-  }
+  // ---------- share ----------
+  const toast = msg => {
+    els.toast.textContent = msg;
+    els.toast.classList.add("show");
+    clearTimeout(toast._t);
+    toast._t = setTimeout(() => els.toast.classList.remove("show"), 2600);
+  };
 
-  function setAnswer(value, unitLabel, detail, warn) {
-    els.cupsOut.textContent = value;
-    els.cupsUnit.textContent = unitLabel;
-    els.detailOut.textContent = detail;
-    els.answer.classList.toggle("warn", !!warn);
-  }
-
-  // ---- Events ----
-  els.workoutSeg.addEventListener("click", function (e) {
-    var btn = e.target.closest(".seg-btn"); if (!btn) return;
-    daily.workout = btn.dataset.workout; saveDaily(true); calculate();
+  els.shareBtn.addEventListener("click", async () => {
+    const q = new URLSearchParams({
+      w: plan.workout,
+      d: plan.workday,
+      o: els.otherCal.value || "0",
+      t: dateStr(new Date())
+    });
+    const url = location.origin + location.pathname + "?" + q;
+    savePlan(true);
+    render();
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: "Rice Cup Calculator — today's plan", url });
+        return;
+      }
+      await navigator.clipboard.writeText(url);
+      toast("Link copied — text it to Grandma 📲");
+    } catch {
+      prompt("Copy this link and text it to Grandma:", url);
+    }
   });
-  els.workdaySeg.addEventListener("click", function (e) {
-    var btn = e.target.closest(".seg-btn"); if (!btn) return;
-    daily.workday = btn.dataset.workday; saveDaily(true); calculate();
-  });
-  els.otherCal.addEventListener("input", function () { saveDaily(true); calculate(); });
 
-  // Grandma's input — not persisted (changes per package), doesn't touch the plan date
-  els.chickenWeight.addEventListener("input", calculate);
-  els.chickenUnit.addEventListener("change", calculate);
-
-  SETTING_FIELDS.forEach(function (id) {
-    els[id].addEventListener("input", function () { saveSettings(); calculate(); });
+  // ---------- events ----------
+  els.workoutChoices.addEventListener("click", e => {
+    const b = e.target.closest(".choice"); if (!b) return;
+    plan.workout = b.dataset.value; savePlan(true); render();
   });
-  els.resetDefaults.addEventListener("click", function () {
-    SETTING_FIELDS.forEach(function (f) { els[f].value = DEFAULTS[f]; });
-    saveSettings(); calculate();
+  els.workdayChoices.addEventListener("click", e => {
+    const b = e.target.closest(".choice"); if (!b) return;
+    plan.workday = b.dataset.value; savePlan(true); render();
+  });
+  els.otherCal.addEventListener("input", () => { savePlan(true); render(); });
+
+  // Grandma's input is per-package: recalc only, never stamps the plan
+  els.chickenWeight.addEventListener("input", render);
+  els.chickenUnit.addEventListener("change", render);
+
+  SETTING_FIELDS.forEach(f => els[f].addEventListener("input", () => { saveSettings(); render(); }));
+  els.resetBtn.addEventListener("click", () => {
+    SETTING_FIELDS.forEach(f => els[f].value = DEFAULTS[f]);
+    saveSettings(); render();
   });
 
+  // ---------- init ----------
   loadSettings();
-  loadDaily();
-  calculate();
+  loadPlan();
+  readSharedPlan();   // a shared link overrides the stored plan
+  els.otherCal.value = plan.otherCal;
+  render();
 })();
 </script>
 </body>
