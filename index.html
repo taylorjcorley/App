@@ -14,6 +14,11 @@
     --muted: #5f6b5f;
     --border: #d8d0c4;
     --result-bg: #e8f5e9;
+    --grandma: #6a1b9a;
+    --grandma-bg: #f5edfb;
+    --grandma-border: #b388d4;
+    --warn: #e65100;
+    --warn-bg: #fff3e0;
   }
   * { box-sizing: border-box; }
   body {
@@ -32,12 +37,21 @@
     margin: 12px 0 4px;
     color: var(--accent-dark);
   }
-  .subtitle {
+  .subtitle { text-align: center; color: var(--muted); margin: 0 0 14px; font-size: 1rem; }
+
+  .today {
     text-align: center;
-    color: var(--muted);
-    margin: 0 0 20px;
-    font-size: 1rem;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 10px 12px;
+    margin-bottom: 18px;
+    font-weight: 700;
+    font-size: 1.15rem;
+    color: var(--accent-dark);
   }
+  .today .cal { display: block; font-weight: 400; font-size: 0.85rem; color: var(--muted); margin-top: 2px; }
+
   .card {
     background: var(--card);
     border: 1px solid var(--border);
@@ -46,30 +60,24 @@
     margin-bottom: 18px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.05);
   }
-  .card h2 {
-    font-size: 1.05rem;
-    margin: 0 0 14px;
-    color: var(--accent-dark);
+  .card h2 { font-size: 1.1rem; margin: 0 0 4px; color: var(--accent-dark); }
+  .card .who { font-size: 0.85rem; color: var(--muted); margin: 0 0 14px; }
+
+  /* The step number badges */
+  .badge {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    border-radius: 999px;
+    width: 1.6em; height: 1.6em;
+    line-height: 1.6em; text-align: center;
+    font-size: 0.95rem; font-weight: 700;
+    margin-right: 6px;
   }
-  label {
-    display: block;
-    font-weight: 600;
-    margin-bottom: 6px;
-    margin-top: 10px;
-  }
-  .hint {
-    font-weight: 400;
-    color: var(--muted);
-    font-size: 0.85rem;
-    display: block;
-    margin-bottom: 8px;
-  }
-  .field {
-    display: flex;
-    align-items: stretch;
-    gap: 8px;
-    margin-bottom: 14px;
-  }
+
+  label { display: block; font-weight: 600; margin-bottom: 6px; margin-top: 10px; }
+  .hint { font-weight: 400; color: var(--muted); font-size: 0.85rem; display: block; margin-bottom: 8px; }
+  .field { display: flex; align-items: stretch; gap: 8px; margin-bottom: 14px; }
   input[type="number"], select {
     width: 100%;
     font-size: 1.3rem;
@@ -80,53 +88,23 @@
     color: var(--text);
     -moz-appearance: textfield;
   }
-  input[type="number"]:focus, select:focus {
-    outline: none;
-    border-color: var(--accent);
-  }
+  input[type="number"]:focus, select:focus { outline: none; border-color: var(--accent); }
   select.unit { width: auto; min-width: 92px; font-size: 1.1rem; }
 
-  /* Segmented choice buttons */
-  .segmented {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    margin-bottom: 6px;
-  }
+  .segmented { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 6px; }
   .seg-btn {
-    flex: 1 1 0;
-    min-width: 96px;
-    font-size: 1rem;
-    font-weight: 600;
+    flex: 1 1 0; min-width: 96px;
+    font-size: 1rem; font-weight: 600;
     padding: 14px 8px;
     border: 2px solid var(--border);
     border-radius: 12px;
-    background: #fff;
-    color: var(--text);
-    cursor: pointer;
-    text-align: center;
-    line-height: 1.25;
+    background: #fff; color: var(--text);
+    cursor: pointer; text-align: center; line-height: 1.25;
   }
-  .seg-btn .amt {
-    display: block;
-    font-size: 0.8rem;
-    font-weight: 500;
-    color: var(--muted);
-    margin-top: 2px;
-  }
-  .seg-btn[aria-pressed="true"] {
-    background: var(--accent);
-    border-color: var(--accent);
-    color: #fff;
-  }
+  .seg-btn .amt { display: block; font-size: 0.8rem; font-weight: 500; color: var(--muted); margin-top: 2px; }
+  .seg-btn[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
   .seg-btn[aria-pressed="true"] .amt { color: #dcedc8; }
-
-  .toggle-row {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-top: 8px;
-  }
+  .toggle-row { display: flex; align-items: center; gap: 12px; margin-top: 8px; }
   .toggle-row .seg-btn { flex: 1 1 0; }
 
   .budget-readout {
@@ -134,77 +112,68 @@
     background: #f1f8e9;
     border: 2px dashed var(--accent);
     border-radius: 12px;
-    padding: 12px;
-    margin-top: 14px;
+    padding: 12px; margin-top: 14px;
   }
-  .budget-readout .big {
-    font-size: 2rem;
-    font-weight: 800;
-    color: var(--accent-dark);
-    line-height: 1.1;
-  }
-  .budget-readout .formula {
-    font-size: 0.85rem;
-    color: var(--muted);
-    margin-top: 4px;
-  }
+  .budget-readout .big { font-size: 2rem; font-weight: 800; color: var(--accent-dark); line-height: 1.1; }
+  .budget-readout .formula { font-size: 0.85rem; color: var(--muted); margin-top: 4px; }
 
-  .result {
+  /* Grandma's card — visually distinct */
+  .grandma-card {
+    background: var(--grandma-bg);
+    border: 3px solid var(--grandma-border);
+  }
+  .grandma-card h2 { color: var(--grandma); }
+  .grandma-card .badge { background: var(--grandma); }
+  .grandma-card input[type="number"], .grandma-card select { font-size: 1.5rem; padding: 16px 12px; }
+  .grandma-card input:focus, .grandma-card select:focus { border-color: var(--grandma); }
+  .setup-note {
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: 0.95rem;
+    margin-bottom: 14px;
+  }
+  .setup-note.ok { background: #e8f5e9; color: var(--accent-dark); }
+  .setup-note.stale { background: var(--warn-bg); color: var(--warn); font-weight: 600; }
+
+  /* The answer */
+  .answer {
     background: var(--result-bg);
-    border: 2px solid var(--accent);
+    border: 3px solid var(--accent);
     border-radius: 16px;
     padding: 22px 18px;
     text-align: center;
     margin-bottom: 18px;
   }
-  .result .cups {
-    font-size: 3.2rem;
-    font-weight: 800;
-    color: var(--accent-dark);
-    line-height: 1.1;
-    margin: 6px 0;
-  }
-  .result .cups-label { font-size: 1.2rem; font-weight: 600; color: var(--accent-dark); }
-  .result .detail { color: var(--muted); font-size: 0.95rem; margin-top: 10px; }
-  .result.warn { background: #fff3e0; border-color: #ef6c00; }
-  .result.warn .cups, .result.warn .cups-label { color: #e65100; }
-
-  .breakdown {
-    font-size: 0.95rem;
-    color: var(--muted);
-    background: #faf7f1;
-    border-radius: 12px;
-    padding: 12px 14px;
-    margin-top: 4px;
-  }
-  .breakdown div { display: flex; justify-content: space-between; padding: 3px 0; }
-  .breakdown .total {
-    border-top: 1px solid var(--border);
-    margin-top: 4px;
-    padding-top: 7px;
+  .answer .answer-label {
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 0.8rem;
     font-weight: 700;
-    color: var(--text);
+    color: var(--accent);
   }
+  .answer .lead { font-size: 1.15rem; font-weight: 600; color: var(--accent-dark); margin-top: 4px; }
+  .answer .cups { font-size: 3.6rem; font-weight: 800; color: var(--accent-dark); line-height: 1.05; margin: 8px 0 2px; }
+  .answer .cups-label { font-size: 1.3rem; font-weight: 700; color: var(--accent-dark); }
+  .answer .detail { color: var(--muted); font-size: 0.95rem; margin-top: 12px; }
+  .answer.warn { background: var(--warn-bg); border-color: var(--warn); }
+  .answer.warn .cups, .answer.warn .cups-label, .answer.warn .lead, .answer.warn .answer-label { color: var(--warn); }
+
+  details.more { margin-top: 4px; }
+  details.more > summary {
+    cursor: pointer; color: var(--accent-dark); font-weight: 600; font-size: 0.95rem; padding: 8px 0;
+    list-style: none;
+  }
+  details.more > summary::-webkit-details-marker { display: none; }
+  .breakdown { font-size: 0.95rem; color: var(--muted); background: #faf7f1; border-radius: 12px; padding: 12px 14px; margin-top: 8px; }
+  .breakdown div { display: flex; justify-content: space-between; padding: 3px 0; }
+  .breakdown .total { border-top: 1px solid var(--border); margin-top: 4px; padding-top: 7px; font-weight: 700; color: var(--text); }
+
   details.settings { margin-top: 8px; }
-  details.settings summary {
-    cursor: pointer;
-    color: var(--accent-dark);
-    font-weight: 600;
-    font-size: 0.95rem;
-    padding: 8px 0;
-  }
+  details.settings summary { cursor: pointer; color: var(--accent-dark); font-weight: 600; font-size: 0.95rem; padding: 8px 0; }
   .settings-body { font-size: 0.95rem; }
   .settings-body label { font-size: 0.95rem; }
   .settings-body input { font-size: 1.05rem; padding: 10px; }
-  .reset-btn {
-    background: none;
-    border: none;
-    color: var(--accent-dark);
-    text-decoration: underline;
-    cursor: pointer;
-    font-size: 0.9rem;
-    padding: 6px 0;
-  }
+  .reset-btn { background: none; border: none; color: var(--accent-dark); text-decoration: underline; cursor: pointer; font-size: 0.9rem; padding: 6px 0; }
   footer { text-align: center; color: var(--muted); font-size: 0.8rem; margin: 12px 0 24px; }
 </style>
 </head>
@@ -213,15 +182,15 @@
   <h1>🍚 Rice Cup Calculator</h1>
   <p class="subtitle">How many dry cups of rice to cook today</p>
 
-  <!-- STEP 1: Build today's calorie budget from quick toggles -->
-  <div class="card">
-    <h2>1. Today's calorie budget</h2>
+  <div class="today">
+    <span id="todayDate">—</span>
+    <span class="cal" id="todayBudget"></span>
+  </div>
 
-    <label for="baseCal">Base calories (doing nothing)</label>
-    <span class="hint">What you burn on a rest day</span>
-    <div class="field">
-      <input type="number" id="baseCal" inputmode="numeric" step="any" min="0" />
-    </div>
+  <!-- TAYLOR sets this up -->
+  <div class="card">
+    <h2><span class="badge">1</span>Today's plan</h2>
+    <p class="who">👤 Taylor fills this in — set it up each day.</p>
 
     <label>Working out today?</label>
     <div class="segmented" id="workoutSeg">
@@ -236,24 +205,27 @@
       <button type="button" class="seg-btn" data-workday="on">Work day<span class="amt" id="amtWorkday">+300</span></button>
     </div>
 
+    <label for="otherCal" style="margin-top:16px;">Calories planned for other food</label>
+    <span class="hint">Everything else you'll eat today (snacks, drinks, etc.)</span>
+    <div class="field">
+      <input type="number" id="otherCal" inputmode="numeric" placeholder="e.g. 800" min="0" step="any" />
+    </div>
+
     <div class="budget-readout">
       <div class="big" id="budgetBig">—</div>
       <div class="formula" id="budgetFormula">calories allowed today</div>
     </div>
   </div>
 
-  <!-- STEP 2: Other food + chicken -->
-  <div class="card">
-    <h2>2. Food today</h2>
+  <!-- GRANDMA's one input -->
+  <div class="card grandma-card">
+    <h2><span class="badge">2</span>The chicken</h2>
+    <p class="who">👵 Grandma — this is the only thing you enter.</p>
 
-    <label for="otherCal">Calories planned for other food</label>
-    <span class="hint">Everything else you'll eat today (snacks, drinks, etc.)</span>
-    <div class="field">
-      <input type="number" id="otherCal" inputmode="numeric" placeholder="e.g. 800" min="0" step="any" />
-    </div>
+    <div class="setup-note" id="setupNote"></div>
 
     <label for="chickenWeight">Weight of the chicken breast package</label>
-    <span class="hint">Thinly sliced chicken breast — read it off the label</span>
+    <span class="hint">Thinly sliced chicken breast — read the number off the label.</span>
     <div class="field">
       <input type="number" id="chickenWeight" inputmode="decimal" placeholder="e.g. 16" min="0" step="any" />
       <select id="chickenUnit" class="unit">
@@ -264,177 +236,196 @@
     </div>
   </div>
 
-  <!-- RESULT -->
-  <div id="result" class="result">
-    <div class="cups-label">Cook this much dry rice:</div>
+  <!-- THE ANSWER -->
+  <div id="answer" class="answer">
+    <div class="answer-label">⬇ The answer ⬇</div>
+    <div class="lead">Cook this much dry rice:</div>
     <div class="cups" id="cupsOut">—</div>
     <div class="cups-label" id="cupsUnit">cups</div>
-    <div class="detail" id="detailOut">Fill in the numbers above.</div>
+    <div class="detail" id="detailOut">Fill in the chicken weight above.</div>
   </div>
 
   <div class="card">
-    <div class="breakdown" id="breakdown">
-      <div><span>Today's budget</span><span id="bTotal">—</span></div>
-      <div><span>Other food</span><span id="bOther">—</span></div>
-      <div><span>Chicken</span><span id="bChicken">—</span></div>
-      <div class="total"><span>Left for rice</span><span id="bRice">—</span></div>
-    </div>
+    <details class="more">
+      <summary>🔢 Show the math</summary>
+      <div class="breakdown" id="breakdown">
+        <div><span>Today's budget</span><span id="bTotal">—</span></div>
+        <div><span>Other food</span><span id="bOther">—</span></div>
+        <div><span>Chicken</span><span id="bChicken">—</span></div>
+        <div class="total"><span>Left for rice</span><span id="bRice">—</span></div>
+      </div>
+    </details>
 
     <details class="settings">
-      <summary>⚙️ Adjust the numbers</summary>
+      <summary>⚙️ Adjust the numbers (Taylor)</summary>
       <div class="settings-body">
+        <label for="baseCal">Base calories (rest day)</label>
+        <div class="field"><input type="number" id="baseCal" inputmode="numeric" step="any" min="0" /></div>
+
         <label for="workoutCal">Workout bonus (calories)</label>
-        <div class="field">
-          <input type="number" id="workoutCal" inputmode="numeric" step="any" min="0" />
-        </div>
+        <div class="field"><input type="number" id="workoutCal" inputmode="numeric" step="any" min="0" /></div>
 
         <label for="legCal">Leg day bonus (calories)</label>
-        <div class="field">
-          <input type="number" id="legCal" inputmode="numeric" step="any" min="0" />
-        </div>
+        <div class="field"><input type="number" id="legCal" inputmode="numeric" step="any" min="0" /></div>
 
         <label for="workdayCal">Work day bonus (calories)</label>
-        <div class="field">
-          <input type="number" id="workdayCal" inputmode="numeric" step="any" min="0" />
-        </div>
+        <div class="field"><input type="number" id="workdayCal" inputmode="numeric" step="any" min="0" /></div>
 
         <label for="chickenCalPer100">Chicken calories per 100 g</label>
         <span class="hint">Raw thinly sliced chicken breast is about 110. Check your label if you want to be exact.</span>
-        <div class="field">
-          <input type="number" id="chickenCalPer100" inputmode="decimal" step="any" min="0" />
-        </div>
+        <div class="field"><input type="number" id="chickenCalPer100" inputmode="decimal" step="any" min="0" /></div>
 
         <label for="riceCalPerCup">Calories per dry cup of rice</label>
         <span class="hint">Uncooked white rice is about 675 per dry cup. Brown rice is about 685.</span>
-        <div class="field">
-          <input type="number" id="riceCalPerCup" inputmode="decimal" step="any" min="0" />
-        </div>
+        <div class="field"><input type="number" id="riceCalPerCup" inputmode="decimal" step="any" min="0" /></div>
 
         <button type="button" class="reset-btn" id="resetDefaults">Reset to default values</button>
       </div>
     </details>
   </div>
 
-  <footer>
-    These are estimates to help plan portions. Adjust the values above to match your routine and products.
-  </footer>
+  <footer>These are estimates to help plan portions. Adjust the values to match your routine and products.</footer>
 </div>
 
 <script>
 (function () {
   "use strict";
 
-  // ---- Default values (all editable in the UI) ----
   var DEFAULTS = {
-    baseCal: 2250,          // burned on a rest day
-    workoutCal: 200,        // bonus for a normal workout day
-    legCal: 100,            // bonus for a leg day (replaces the workout bonus)
-    workdayCal: 300,        // bonus for a work day (stacks with a workout)
-    chickenCalPer100: 110,  // raw boneless skinless chicken breast, per 100 g
-    riceCalPerCup: 675      // uncooked white rice, per dry US cup
+    baseCal: 2250, workoutCal: 200, legCal: 100, workdayCal: 300,
+    chickenCalPer100: 110, riceCalPerCup: 675
   };
-
-  // Today's toggle selections (not persisted — they change every day)
-  var state = { workout: "none", workday: "off" };
 
   var TO_GRAMS = { oz: 28.3495, lb: 453.592, g: 1 };
 
-  var els = {
-    baseCal: document.getElementById("baseCal"),
-    otherCal: document.getElementById("otherCal"),
-    chickenWeight: document.getElementById("chickenWeight"),
-    chickenUnit: document.getElementById("chickenUnit"),
-    workoutSeg: document.getElementById("workoutSeg"),
-    workdaySeg: document.getElementById("workdaySeg"),
-    workoutCal: document.getElementById("workoutCal"),
-    legCal: document.getElementById("legCal"),
-    workdayCal: document.getElementById("workdayCal"),
-    chickenCalPer100: document.getElementById("chickenCalPer100"),
-    riceCalPerCup: document.getElementById("riceCalPerCup"),
-    amtWorkout: document.getElementById("amtWorkout"),
-    amtLeg: document.getElementById("amtLeg"),
-    amtWorkday: document.getElementById("amtWorkday"),
-    budgetBig: document.getElementById("budgetBig"),
-    budgetFormula: document.getElementById("budgetFormula"),
-    cupsOut: document.getElementById("cupsOut"),
-    cupsUnit: document.getElementById("cupsUnit"),
-    detailOut: document.getElementById("detailOut"),
-    result: document.getElementById("result"),
-    bTotal: document.getElementById("bTotal"),
-    bOther: document.getElementById("bOther"),
-    bChicken: document.getElementById("bChicken"),
-    bRice: document.getElementById("bRice"),
-    resetDefaults: document.getElementById("resetDefaults")
-  };
+  var els = {};
+  ["baseCal","otherCal","chickenWeight","chickenUnit","workoutSeg","workdaySeg",
+   "workoutCal","legCal","workdayCal","chickenCalPer100","riceCalPerCup",
+   "amtWorkout","amtLeg","amtWorkday","budgetBig","budgetFormula",
+   "todayDate","todayBudget","setupNote",
+   "cupsOut","cupsUnit","detailOut","answer",
+   "bTotal","bOther","bChicken","bRice","resetDefaults"
+  ].forEach(function (id) { els[id] = document.getElementById(id); });
 
-  var STORE_KEY = "riceCalcSettings";
-  var SETTING_FIELDS = ["baseCal", "workoutCal", "legCal", "workdayCal", "chickenCalPer100", "riceCalPerCup"];
+  var SETTINGS_KEY = "riceCalcSettings";   // Taylor's constants (rarely change)
+  var DAILY_KEY = "riceCalcDaily";         // today's plan (changes day to day)
+  var SETTING_FIELDS = ["baseCal","workoutCal","legCal","workdayCal","chickenCalPer100","riceCalPerCup"];
+
+  // Today's plan (persisted so grandma sees what Taylor set on this device)
+  var daily = { workout: "none", workday: "off", otherCal: "", setupDate: null };
 
   function num(v, fallback) {
     var n = parseFloat(v);
     return isFinite(n) ? n : (fallback === undefined ? NaN : fallback);
   }
-
-  function loadSettings() {
-    var saved = {};
-    try { saved = JSON.parse(localStorage.getItem(STORE_KEY)) || {}; } catch (e) { saved = {}; }
-    SETTING_FIELDS.forEach(function (f) {
-      els[f].value = num(saved[f], DEFAULTS[f]);
-    });
-  }
-
-  function saveSettings() {
-    var out = {};
-    SETTING_FIELDS.forEach(function (f) { out[f] = num(els[f].value, DEFAULTS[f]); });
-    try { localStorage.setItem(STORE_KEY, JSON.stringify(out)); } catch (e) { /* ignore */ }
-  }
-
   function fmtCal(n) { return Math.round(n).toLocaleString() + " cal"; }
   function roundToQuarter(n) { return Math.round(n * 4) / 4; }
   function fmtCups(n) { return n === 0 ? "0" : (Math.round(n * 100) / 100).toString(); }
 
-  // Reflect the chosen segmented buttons + bonus labels
+  // Local YYYY-MM-DD (for comparing "set up" day to today)
+  function localDateStr(d) {
+    return d.getFullYear() + "-" +
+      String(d.getMonth() + 1).padStart(2, "0") + "-" +
+      String(d.getDate()).padStart(2, "0");
+  }
+  function prettyDate(d) {
+    try {
+      return d.toLocaleDateString(undefined, { weekday: "long", month: "long", day: "numeric", year: "numeric" });
+    } catch (e) {
+      return d.toDateString();
+    }
+  }
+
+  // ---- Persistence ----
+  function loadSettings() {
+    var saved = {};
+    try { saved = JSON.parse(localStorage.getItem(SETTINGS_KEY)) || {}; } catch (e) {}
+    SETTING_FIELDS.forEach(function (f) { els[f].value = num(saved[f], DEFAULTS[f]); });
+  }
+  function saveSettings() {
+    var out = {};
+    SETTING_FIELDS.forEach(function (f) { out[f] = num(els[f].value, DEFAULTS[f]); });
+    try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(out)); } catch (e) {}
+  }
+  function loadDaily() {
+    try {
+      var s = JSON.parse(localStorage.getItem(DAILY_KEY));
+      if (s && typeof s === "object") {
+        daily.workout = s.workout || "none";
+        daily.workday = s.workday || "off";
+        daily.otherCal = (s.otherCal === undefined || s.otherCal === null) ? "" : s.otherCal;
+        daily.setupDate = s.setupDate || null;
+      }
+    } catch (e) {}
+    els.otherCal.value = daily.otherCal;
+  }
+  function saveDaily(markToday) {
+    if (markToday) daily.setupDate = localDateStr(new Date());
+    daily.otherCal = els.otherCal.value;
+    try { localStorage.setItem(DAILY_KEY, JSON.stringify(daily)); } catch (e) {}
+  }
+
   function syncButtons() {
     Array.prototype.forEach.call(els.workoutSeg.querySelectorAll(".seg-btn"), function (b) {
-      b.setAttribute("aria-pressed", b.dataset.workout === state.workout ? "true" : "false");
+      b.setAttribute("aria-pressed", b.dataset.workout === daily.workout ? "true" : "false");
     });
     Array.prototype.forEach.call(els.workdaySeg.querySelectorAll(".seg-btn"), function (b) {
-      b.setAttribute("aria-pressed", b.dataset.workday === state.workday ? "true" : "false");
+      b.setAttribute("aria-pressed", b.dataset.workday === daily.workday ? "true" : "false");
     });
     els.amtWorkout.textContent = "+" + Math.round(num(els.workoutCal.value, DEFAULTS.workoutCal));
     els.amtLeg.textContent = "+" + Math.round(num(els.legCal.value, DEFAULTS.legCal));
     els.amtWorkday.textContent = "+" + Math.round(num(els.workdayCal.value, DEFAULTS.workdayCal));
   }
 
-  // Build today's total budget from base + the active toggles
   function computeBudget() {
     var base = num(els.baseCal.value, DEFAULTS.baseCal);
     var parts = [{ label: Math.round(base).toLocaleString(), val: base }];
-
-    if (state.workout === "workout") {
+    if (daily.workout === "workout") {
       var w = num(els.workoutCal.value, DEFAULTS.workoutCal);
       parts.push({ label: "+" + Math.round(w) + " workout", val: w });
-    } else if (state.workout === "leg") {
+    } else if (daily.workout === "leg") {
       var l = num(els.legCal.value, DEFAULTS.legCal);
       parts.push({ label: "+" + Math.round(l) + " leg day", val: l });
     }
-    if (state.workday === "on") {
+    if (daily.workday === "on") {
       var wd = num(els.workdayCal.value, DEFAULTS.workdayCal);
       parts.push({ label: "+" + Math.round(wd) + " work", val: wd });
     }
-
     var total = parts.reduce(function (s, p) { return s + p.val; }, 0);
     return { total: total, formula: parts.map(function (p) { return p.label; }).join("  ") };
+  }
+
+  // Show grandma whether the plan is fresh (set up today) or stale
+  function renderSetupNote() {
+    var todayStr = localDateStr(new Date());
+    if (!daily.setupDate) {
+      els.setupNote.className = "setup-note stale";
+      els.setupNote.textContent = "⚠️ Taylor hasn't set up today's plan yet (Step 1 above).";
+    } else if (daily.setupDate === todayStr) {
+      els.setupNote.className = "setup-note ok";
+      els.setupNote.textContent = "✓ Taylor set up today's plan. Just enter the chicken weight.";
+    } else {
+      var d = new Date(daily.setupDate + "T00:00:00");
+      els.setupNote.className = "setup-note stale";
+      els.setupNote.textContent = "⚠️ This plan was last set up on " + prettyDate(d) +
+        " — not today. Ask Taylor to update Step 1.";
+    }
   }
 
   function calculate() {
     syncButtons();
 
-    var budget = computeBudget();
-    var total = budget.total;
-    els.budgetBig.textContent = fmtCal(total);
-    els.budgetFormula.textContent = budget.formula + "  = allowed today";
+    var now = new Date();
+    els.todayDate.textContent = "📅 Today is " + prettyDate(now);
 
+    var budget = computeBudget();
+    els.budgetBig.textContent = fmtCal(budget.total);
+    els.budgetFormula.textContent = budget.formula + "  = allowed today";
+    els.todayBudget.textContent = "Budget: " + fmtCal(budget.total);
+
+    renderSetupNote();
+
+    var total = budget.total;
     var other = num(els.otherCal.value, 0);
     var weight = num(els.chickenWeight.value);
     var unit = els.chickenUnit.value;
@@ -444,19 +435,23 @@
     var weightGrams = isFinite(weight) ? weight * (TO_GRAMS[unit] || 1) : NaN;
     var chickenCal = isFinite(weightGrams) ? (weightGrams / 100) * chickenCalPer100 : 0;
 
-    els.bTotal.textContent = isFinite(total) ? fmtCal(total) : "—";
+    els.bTotal.textContent = fmtCal(total);
     els.bOther.textContent = isFinite(other) ? "− " + fmtCal(other) : "—";
     els.bChicken.textContent = isFinite(weightGrams) ? "− " + fmtCal(chickenCal) : "—";
 
     var remaining = total - (isFinite(other) ? other : 0) - chickenCal;
     els.bRice.textContent = fmtCal(remaining);
 
+    if (!isFinite(weight)) {
+      setAnswer("—", "cups", "👵 Grandma: type the chicken package weight above to see the answer.", false);
+      return;
+    }
     if (riceCalPerCup <= 0) {
-      setResult("—", "cups", "Set a calories-per-cup value greater than zero.", true);
+      setAnswer("—", "cups", "Set a calories-per-cup value greater than zero (in ⚙️).", true);
       return;
     }
     if (remaining <= 0) {
-      setResult("0", "cups", "No calories left for rice with these numbers.", true);
+      setAnswer("0", "cups", "No calories left for rice with today's numbers.", true);
       return;
     }
 
@@ -464,46 +459,41 @@
     var cups = roundToQuarter(rawCups);
     var detail = "That uses " + fmtCal(remaining) + " of rice (" +
       fmtCups(rawCups) + " cups exact, rounded to the nearest ¼ cup).";
-    setResult(fmtCups(cups), cups === 1 ? "cup" : "cups", detail, false);
+    setAnswer(fmtCups(cups), cups === 1 ? "cup" : "cups", detail, false);
   }
 
-  function setResult(value, unitLabel, detail, warn) {
+  function setAnswer(value, unitLabel, detail, warn) {
     els.cupsOut.textContent = value;
     els.cupsUnit.textContent = unitLabel;
     els.detailOut.textContent = detail;
-    els.result.classList.toggle("warn", !!warn);
+    els.answer.classList.toggle("warn", !!warn);
   }
 
   // ---- Events ----
   els.workoutSeg.addEventListener("click", function (e) {
-    var btn = e.target.closest(".seg-btn");
-    if (!btn) return;
-    state.workout = btn.dataset.workout;
-    calculate();
+    var btn = e.target.closest(".seg-btn"); if (!btn) return;
+    daily.workout = btn.dataset.workout; saveDaily(true); calculate();
   });
   els.workdaySeg.addEventListener("click", function (e) {
-    var btn = e.target.closest(".seg-btn");
-    if (!btn) return;
-    state.workday = btn.dataset.workday;
-    calculate();
+    var btn = e.target.closest(".seg-btn"); if (!btn) return;
+    daily.workday = btn.dataset.workday; saveDaily(true); calculate();
   });
+  els.otherCal.addEventListener("input", function () { saveDaily(true); calculate(); });
 
-  ["otherCal", "chickenWeight"].forEach(function (id) {
-    els[id].addEventListener("input", calculate);
-  });
+  // Grandma's input — not persisted (changes per package), doesn't touch the plan date
+  els.chickenWeight.addEventListener("input", calculate);
   els.chickenUnit.addEventListener("change", calculate);
 
   SETTING_FIELDS.forEach(function (id) {
     els[id].addEventListener("input", function () { saveSettings(); calculate(); });
   });
-
   els.resetDefaults.addEventListener("click", function () {
     SETTING_FIELDS.forEach(function (f) { els[f].value = DEFAULTS[f]; });
-    saveSettings();
-    calculate();
+    saveSettings(); calculate();
   });
 
   loadSettings();
+  loadDaily();
   calculate();
 })();
 </script>
