@@ -181,6 +181,20 @@ Before paying anyone five figures:
 
 Reading the table: Bangkok bundles PRP/laser and ~5 days of in-clinic washing into the package but costs 10–14 days away plus remote-aftercare risk; US practices include a post-op kit and remote photo follow-ups with in-person checks optional. Lindsey's figure is **FUT** (linear donor scar; his FUE at $9/graft ≈ $18,000+ is out of tier) — it's the domestic value outlier, roughly matching Bangkok all-in without the flights. At exactly 2,000 grafts SMG's $3 over-2,000 marginal rate barely engages, so its edge over Vories narrows to ~$1,200. Ongoing meds (finasteride/minoxidil) cost the same everywhere and are excluded.
 
+**Contact directory** (verified from listings, August 2026):
+
+| Clinic | Phone | Book via | Notes |
+|---|---|---|---|
+| Carolina Hair Surgery (Vories) | Mt. Pleasant (843) 884-1258 · Fort Mill (803) 217-3065 | [carolinahairsurgery.com/contact-us](https://carolinahairsurgery.com/contact-us/) · mvories@carolinahairsurgery.com | Consults free, conducted by Dr. Vories himself, by appointment |
+| Dr. Lindsey | (703) 356-3260 | [drwilliamlindsey.com](https://drwilliamlindsey.com/) | McLean, VA; ask about FUT coverage at your graft count |
+| Cooley Hair Center | (704) 542-1601 | [haircenter.com/contact-us](https://haircenter.com/contact-us/) | Consults reportedly book 2–3 months out — call early |
+| Hair Restoration Center of CT (Boden) | (860) 563-1400 | [hairtransplantct.com](https://hairtransplantct.com/) | Coordinator responds next business day to form submissions |
+| Dr. Carlos Wesley | (844) 745-6362 | [drcarloswesley.com](https://www.drcarloswesley.com/) | 2 E 88th St, Manhattan |
+| Shapiro Medical Group | (952) 926-0000 | [shapiromedical.com](https://shapiromedical.com/the-consult-process/) | Virtual consult needs a 5-angle photo set; ask lead time per surgeon, current tier pricing, deposit terms |
+| Absolute Hair Clinic (Laorwong / Ratchathorn) | +66 2 615 8669 · +66 87 275 2989 | [absolutehairclinic.com/en/contact-us-2](https://absolutehairclinic.com/en/contact-us-2/) | Name your surgeon explicitly; listings show two Bangkok addresses (Phayathai and Krung Thonburi) — confirm location when booking; Bangkok is 11 hours ahead of US Eastern |
+
+One photo set serves every virtual consult: frontal hairline, top-down crown, both sides, and the donor area at the back — shot in good light, hair dry.
+
 ---
 
 ## Limitations
