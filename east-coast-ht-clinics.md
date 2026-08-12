@@ -167,6 +167,20 @@ Before paying anyone five figures:
 
 **Dr. Ratchathorn Panchaprateep (same clinic) — deserves her own entry.** MD/PhD and associate professor of dermatology at Chulalongkorn University; [ABHRS diplomate since 2013, directory-verified](https://abhrs.org/directory/listing/ratchathorn-panchaprateep-md); ISHRS fellow; hair-surgery fellowship at DHT Clinic plus a hair-and-nail fellowship at the University of Miami; winner of the ISHRS **Platinum Follicle Award** — the field's top research honor, the same one Dr. Cooley holds, and she's its youngest female recipient — with peer-reviewed publications on hair-follicle stem cells ([bio](https://absolutehairclinic.com/en/assoc-prof-ratchathorn-panchaprateep-2/)). She handles many of Absolute's international patients and bills ~100 THB/graft (~$3.00) vs. Laorwong's 80–90 THB. Getting "the associate" here is the rare case where that may be an upgrade rather than a downgrade — but the clinic prices the two differently, so name your surgeon explicitly when booking, and apply the same questions (who extracts, who places, scope in writing). Usual caveat: she too has a paid "recommended" profile on the big forum.
 
+**Worked example — 2,000 grafts, all-in** (surgery + trip + immediate aftercare; planning estimates assuming a Southeast US departure, mid-2026 — surgery figures are published/derived rates, trip figures are estimates, none are quotes):
+
+| Option | Surgery (2,000 grafts) | Trip | Realistic all-in |
+|---|---|---|---|
+| Absolute — Dr. Laorwong (Bangkok) | ~$4,800–5,400 (80–90 THB/graft) | ~$1,800–2,800 (flights + 8–10 nights) | **~$7,000–8,000** |
+| Absolute — Dr. Ratchathorn (Bangkok) | ~$6,000 (100 THB/graft) | same | **~$8,000–9,000** |
+| Dr. Lindsey **FUT** (McLean, VA) | ~$7,500 (confirm at 2,000 grafts) | ~$400–900 (drive/fly + 2 nights) | **~$8,000–8,500** |
+| SMG (Minneapolis) | $10,500 after $500 travel credit | ~$800–1,000 (fly + 2–3 nights) | **~$11,300–11,500** |
+| Dr. Cooley (Charlotte) | quoted in consult; ~$10,000–14,000 | ~$400–500 (drive + 2 nights) | **~$10,500–14,500** |
+| Dr. Vories (Charleston/Fort Mill) | $12,000 flat ($6/graft; 10% deposit) | ~$500–700 (drive + 2–3 nights) | **~$12,500–12,700** |
+| Dr. Boden (CT) / Dr. Wesley (NYC) | ~$10,000–12,000 | ~$700–1,100 | **~$11,000–13,000** |
+
+Reading the table: Bangkok bundles PRP/laser and ~5 days of in-clinic washing into the package but costs 10–14 days away plus remote-aftercare risk; US practices include a post-op kit and remote photo follow-ups with in-person checks optional. Lindsey's figure is **FUT** (linear donor scar; his FUE at $9/graft ≈ $18,000+ is out of tier) — it's the domestic value outlier, roughly matching Bangkok all-in without the flights. At exactly 2,000 grafts SMG's $3 over-2,000 marginal rate barely engages, so its edge over Vories narrows to ~$1,200. Ongoing meds (finasteride/minoxidil) cost the same everywhere and are excluded.
+
 ---
 
 ## Limitations
