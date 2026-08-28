@@ -187,7 +187,7 @@ Reading the table: Bangkok bundles PRP/laser and ~5 days of in-clinic washing in
 |---|---|---|---|
 | Carolina Hair Surgery (Vories) | Mt. Pleasant (843) 884-1258 · Fort Mill (803) 217-3065 | [carolinahairsurgery.com/contact-us](https://carolinahairsurgery.com/contact-us/) · mvories@carolinahairsurgery.com | Consults free, conducted by Dr. Vories himself, by appointment |
 | Dr. Lindsey | (703) 356-3260 | [drwilliamlindsey.com](https://drwilliamlindsey.com/) | McLean, VA; ask about FUT coverage at your graft count |
-| Cooley Hair Center | (704) 542-1601 | [haircenter.com/contact-us](https://haircenter.com/contact-us/) | Consults reportedly book 2–3 months out — call early |
+| Cooley Hair Center | (704) 542-1601 | [haircenter.com/contact-us](https://haircenter.com/contact-us/) | Consults reportedly book 2–3 months out — call early. Consult fee: $150 with staff / $300 with Dr. Cooley, **not credited toward surgery** — if paying, pay for Cooley himself |
 | Hair Restoration Center of CT (Boden) | (860) 563-1400 | [hairtransplantct.com](https://hairtransplantct.com/) | Coordinator responds next business day to form submissions |
 | Dr. Carlos Wesley | (844) 745-6362 | [drcarloswesley.com](https://www.drcarloswesley.com/) | 2 E 88th St, Manhattan |
 | Shapiro Medical Group | (952) 926-0000 | [shapiromedical.com](https://shapiromedical.com/the-consult-process/) | Virtual consult needs a 5-angle photo set; ask lead time per surgeon, current tier pricing, deposit terms |
